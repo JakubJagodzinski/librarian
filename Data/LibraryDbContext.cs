@@ -62,8 +62,8 @@ namespace librarian.Data
             // BlacklistedReader -> Reader
             modelBuilder.Entity<BlacklistedReader>()
                 .HasOne(br => br.Reader)
-                .WithOne()
-                .HasForeignKey<BlacklistedReader>(br => br.ReaderId);
+                .WithMany(r => r.BlacklistedEntries)
+                .HasForeignKey(br => br.ReaderId);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -13,5 +13,6 @@ namespace librarian.Models
         [JsonIgnore]
         public ICollection<Rental> Rentals { get; set; } = new List<Rental>();
         public UserCredentials UserCredentials { get; set; }
+        public ICollection<BlacklistedReader> BlacklistedEntries { get; set; } = new List<BlacklistedReader>();
     }
 }
