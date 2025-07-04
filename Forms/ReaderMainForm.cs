@@ -15,12 +15,6 @@ namespace librarian.Forms
 
             LoadUserData();
             LoadBooks();
-        }
-
-        public ReaderMainForm()
-        {
-            InitializeComponent();
-            LoadBooks();
             LoadRentals();
         }
 
@@ -51,11 +45,11 @@ namespace librarian.Forms
                 var rentals = db.Rentals
                     .Include(r => r.Book)
                     .Include(r => r.Reader)
+                    .Where(r => r.ReaderId == _userId)
                     .Select(r => new
                     {
                         ID = r.RentalId,
                         Title = r.Book.Title,
-                        Reader = r.Reader.FullName,
                         RentalDate = r.RentalDate.ToShortDateString(),
                         ReturnDate = r.ReturnDate.HasValue ? r.ReturnDate.Value.ToShortDateString() : "–"
                     })
