@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace librarian
 {
     internal static class Program
@@ -11,20 +13,29 @@ namespace librarian
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
+
             using (var context = new LibraryContext())
             {
-                if (context.TestConnection())
+                context.Seed();
+
+                StringBuilder output = new StringBuilder();
+
+                output.AppendLine("Authors:");
+                foreach (var author in context.Authors.ToList())
                 {
-                    MessageBox.Show("Database connection is working.", "Connection Status");
+                    output.AppendLine($"- {author.AuthorId}: {author.AuthorFullName}");
                 }
-                else
+
+                output.AppendLine("\nBooks:");
+                foreach (var book in context.Books.ToList())
                 {
-                    MessageBox.Show("Database connection failed.", "Connection Status");
+                    output.AppendLine($"- {book.BookId}: {book.Title} by AuthorId {book.AuthorId}");
                 }
+
+                MessageBox.Show(output.ToString(), "Seeded Data");
             }
+
             Application.Run(new Form1());
-
-
 
         }
     }

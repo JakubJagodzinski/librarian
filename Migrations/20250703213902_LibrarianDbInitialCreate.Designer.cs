@@ -12,8 +12,8 @@ using librarian;
 namespace librarian.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20250702211447_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250703213902_LibrarianDbInitialCreate")]
+    partial class LibrarianDbInitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using librarian;
 
@@ -11,9 +12,11 @@ using librarian;
 namespace librarian.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    partial class LibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20250704010018_AddEmployeeTable")]
+    partial class AddEmployeeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

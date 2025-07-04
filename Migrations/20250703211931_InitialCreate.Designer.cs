@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using librarian;
 
@@ -11,9 +12,11 @@ using librarian;
 namespace librarian.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    partial class LibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20250703211931_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,37 +112,6 @@ namespace librarian.Migrations
                     b.HasIndex("GenreId");
 
                     b.ToTable("BookGenres");
-                });
-
-            modelBuilder.Entity("librarian.Models.Employee", b =>
-                {
-                    b.Property<int>("EmployeeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("HireDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("TerminationDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("EmployeeId");
-
-                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("librarian.Models.Genre", b =>

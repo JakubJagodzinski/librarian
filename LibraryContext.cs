@@ -1,7 +1,6 @@
 ﻿using librarian.Models;
+using librarian.Seeders;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic.ApplicationServices;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace librarian
 {
@@ -15,35 +14,36 @@ namespace librarian
         public DbSet<Genre> Genres { get; set; }
         public DbSet<BookGenre> BookGenres { get; set; }
         public DbSet<BlacklistedReader> BlacklistedReaders { get; set; }
+        public DbSet<Employee> Employees { get; set; }
 
         // Configure the database connection
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("""Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = C:\Users\kubaj\source\repos\librarian\Database1.mdf; Integrated Security = True""");
+            optionsBuilder.UseSqlServer("""Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = C:\Users\kubaj\source\repos\librarian\LibrarianDb.mdf; Integrated Security = True""");
         }
 
         // Configure model relationships
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Relacja Book -> Author
+            // Book -> Author
             modelBuilder.Entity<Book>()
                 .HasOne(b => b.Author)
                 .WithMany(a => a.Books)
                 .HasForeignKey(b => b.AuthorId);
 
-            // Relacja Rental -> Reader
+            // Rental -> Reader
             modelBuilder.Entity<Rental>()
                 .HasOne(r => r.Reader)
                 .WithMany(reader => reader.Rentals)
                 .HasForeignKey(r => r.ReaderId);
 
-            // Relacja Rental -> Book
+            // Rental -> Book
             modelBuilder.Entity<Rental>()
                 .HasOne(r => r.Book)
                 .WithMany()
                 .HasForeignKey(r => r.BookId);
 
-            // Relacja BookGenre -> Book i Genre
+            // BookGenre -> Book and Genre
             modelBuilder.Entity<BookGenre>()
                 .HasKey(bg => new { bg.BookId, bg.GenreId });
 
@@ -57,7 +57,7 @@ namespace librarian
                 .WithMany()
                 .HasForeignKey(bg => bg.GenreId);
 
-            // Relacja BlacklistedReader -> Reader
+            // BlacklistedReader -> Reader
             modelBuilder.Entity<BlacklistedReader>()
                 .HasOne(br => br.Reader)
                 .WithOne()
@@ -81,6 +81,27 @@ namespace librarian
             {
                 Console.WriteLine($"Connection failed: {ex.Message}");
                 return false;
+            }
+        }
+
+        public void Seed()
+        {
+
+            var seeders = new List<ISeeder>
+            {
+                new AuthorSeeder(),
+                new BookSeeder(),
+                new ReaderSeeder(),
+                new BlacklistedReaderSeeder(),
+                new GenreSeeder(),
+                new EmployeeSeeder(),
+                new RentalSeeder(),
+                new BookGenreSeeder()
+            };
+
+            foreach (var seeder in seeders)
+            {
+                seeder.Seed(this);
             }
         }
 
