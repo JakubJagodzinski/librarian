@@ -1,4 +1,5 @@
 using System.Text;
+using librarian.Data;
 
 namespace librarian
 {
@@ -14,7 +15,7 @@ namespace librarian
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
-            using (var context = new LibraryContext())
+            using (var context = new LibraryDbContext())
             {
                 context.Seed();
 

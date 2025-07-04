@@ -1,10 +1,10 @@
-﻿using librarian.Models;
-using librarian.Seeders;
+﻿using librarian.Data.Seeders;
+using librarian.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace librarian
+namespace librarian.Data
 {
-    public class LibraryContext : DbContext
+    public class LibraryDbContext : DbContext
     {
         // DbSet properties for your models
         public DbSet<Book> Books { get; set; }

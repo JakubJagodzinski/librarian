@@ -1,10 +1,10 @@
 ﻿using librarian.Models;
 
-namespace librarian.Seeders
+namespace librarian.Data.Seeders
 {
     public class AuthorSeeder : ISeeder
     {
-        public void Seed(LibraryContext context)
+        public void Seed(LibraryDbContext context)
         {
             if (!context.Authors.Any())
             {
