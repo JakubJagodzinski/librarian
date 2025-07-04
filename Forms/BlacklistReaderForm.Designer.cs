@@ -36,6 +36,7 @@
             periodLabel = new Label();
             blacklistReaderButton = new Button();
             readerNameLabel = new Label();
+            cancelButton = new Button();
             SuspendLayout();
             // 
             // reasonLabel
@@ -90,7 +91,7 @@
             // 
             // blacklistReaderButton
             // 
-            blacklistReaderButton.Location = new Point(341, 354);
+            blacklistReaderButton.Location = new Point(399, 354);
             blacklistReaderButton.Name = "blacklistReaderButton";
             blacklistReaderButton.Size = new Size(123, 23);
             blacklistReaderButton.TabIndex = 6;
@@ -107,11 +108,22 @@
             readerNameLabel.TabIndex = 7;
             readerNameLabel.Text = "Reader info";
             // 
+            // cancelButton
+            // 
+            cancelButton.Location = new Point(288, 354);
+            cancelButton.Name = "cancelButton";
+            cancelButton.Size = new Size(75, 23);
+            cancelButton.TabIndex = 8;
+            cancelButton.Text = "Cancel";
+            cancelButton.UseVisualStyleBackColor = true;
+            cancelButton.Click += cancelButton_Click;
+            // 
             // BlacklistReaderForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(cancelButton);
             Controls.Add(readerNameLabel);
             Controls.Add(blacklistReaderButton);
             Controls.Add(periodLabel);
@@ -136,5 +148,6 @@
         private Label periodLabel;
         private Button blacklistReaderButton;
         private Label readerNameLabel;
+        private Button cancelButton;
     }
 }

@@ -67,5 +67,11 @@ namespace librarian.Forms
             this.Hide();
 
         }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            _employeeMainForm.Show();
+            this.Hide();
+        }
     }
 }
