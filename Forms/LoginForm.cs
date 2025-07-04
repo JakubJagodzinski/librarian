@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace librarian.Forms
 {
-    public partial class LoginForm : Form
+    public partial class LoginForm : BaseForm
     {
         public LoginForm()
         {

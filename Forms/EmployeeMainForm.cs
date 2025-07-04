@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace librarian.Forms
 {
-    public partial class EmployeeMainForm : Form
+    public partial class EmployeeMainForm : BaseForm
     {
 
         private readonly int _userId;
@@ -35,7 +35,7 @@ namespace librarian.Forms
                     {
                         r?.ReaderId,
                         FullName = r?.FullName ?? "",
-                        Email = r?.UserCredentials?.Email ?? "",
+                        Email = r?.Email ?? "",
                         PhoneNumber = r?.PhoneNumber ?? "",
                         r?.DateOfBirth,
                         

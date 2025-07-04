@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace librarian.Forms
 {
-    public partial class ReaderMainForm : Form
+    public partial class ReaderMainForm : BaseForm
     {
         private readonly int _userId;
 

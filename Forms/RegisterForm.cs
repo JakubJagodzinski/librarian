@@ -3,7 +3,7 @@ using librarian.Models;
 
 namespace librarian.Forms
 {
-    public partial class RegisterForm : Form
+    public partial class RegisterForm : BaseForm
     {
         public RegisterForm()
         {
