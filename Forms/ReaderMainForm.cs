@@ -36,7 +36,10 @@ namespace librarian.Forms
                     .Select(b => new
                     {
                         b.Title,
-                        Author = b.Author.AuthorFullName,
+                        Author = b.Author?.AuthorFullName ?? "",
+                        b.PublishedYear,
+                        b.Pages,
+                        b.InStock
                     }).ToList();
             }
         }
