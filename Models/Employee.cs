@@ -8,5 +8,6 @@
         public string PhoneNumber { get; set; } = string.Empty;
         public DateTime HireDate { get; set; }
         public DateTime? TerminationDate { get; set; }
+        public UserCredentials UserCredentials { get; set; }
     }
 }

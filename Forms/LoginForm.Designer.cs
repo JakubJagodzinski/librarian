@@ -70,6 +70,7 @@
             passwordTextBox.PlaceholderText = "************";
             passwordTextBox.Size = new Size(125, 23);
             passwordTextBox.TabIndex = 3;
+            passwordTextBox.UseSystemPasswordChar = true;
             // 
             // loginButton
             // 

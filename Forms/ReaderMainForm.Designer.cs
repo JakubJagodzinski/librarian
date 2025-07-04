@@ -32,9 +32,15 @@
             logoutButton = new Button();
             mainTabControl = new TabControl();
             booksTab = new TabPage();
+            booksDataGridView = new DataGridView();
             rentalsTab = new TabPage();
             myAccountTab = new TabPage();
+            myRentalsDataGridView = new DataGridView();
             mainTabControl.SuspendLayout();
+            booksTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)booksDataGridView).BeginInit();
+            rentalsTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)myRentalsDataGridView).BeginInit();
             SuspendLayout();
             // 
             // welcomeLabel
@@ -69,6 +75,7 @@
             // 
             // booksTab
             // 
+            booksTab.Controls.Add(booksDataGridView);
             booksTab.Location = new Point(4, 24);
             booksTab.Name = "booksTab";
             booksTab.Padding = new Padding(3);
@@ -77,8 +84,17 @@
             booksTab.Text = "Books";
             booksTab.UseVisualStyleBackColor = true;
             // 
+            // booksDataGridView
+            // 
+            booksDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            booksDataGridView.Location = new Point(0, 0);
+            booksDataGridView.Name = "booksDataGridView";
+            booksDataGridView.Size = new Size(743, 367);
+            booksDataGridView.TabIndex = 0;
+            // 
             // rentalsTab
             // 
+            rentalsTab.Controls.Add(myRentalsDataGridView);
             rentalsTab.Location = new Point(4, 24);
             rentalsTab.Name = "rentalsTab";
             rentalsTab.Padding = new Padding(3);
@@ -97,6 +113,14 @@
             myAccountTab.Text = "My Account";
             myAccountTab.UseVisualStyleBackColor = true;
             // 
+            // myRentalsDataGridView
+            // 
+            myRentalsDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            myRentalsDataGridView.Location = new Point(0, 0);
+            myRentalsDataGridView.Name = "myRentalsDataGridView";
+            myRentalsDataGridView.Size = new Size(743, 367);
+            myRentalsDataGridView.TabIndex = 0;
+            // 
             // ReaderMainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -108,6 +132,10 @@
             Name = "ReaderMainForm";
             Text = "ReaderMainForm";
             mainTabControl.ResumeLayout(false);
+            booksTab.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)booksDataGridView).EndInit();
+            rentalsTab.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)myRentalsDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -120,5 +148,7 @@
         private TabPage booksTab;
         private TabPage rentalsTab;
         private TabPage myAccountTab;
+        private DataGridView booksDataGridView;
+        private DataGridView myRentalsDataGridView;
     }
 }

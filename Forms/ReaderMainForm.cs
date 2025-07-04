@@ -1,4 +1,8 @@
-﻿namespace librarian.Forms
+﻿using System;
+using librarian.Data;
+using Microsoft.EntityFrameworkCore;
+
+namespace librarian.Forms
 {
     public partial class ReaderMainForm : Form
     {
@@ -8,39 +12,69 @@
         {
             InitializeComponent();
             _userId = userId;
-            //LoadUserData();
-            //LoadBooks();
+
+            LoadUserData();
+            LoadBooks();
         }
 
-        //private void LoadUserData()
-        //{
-        //    using (var db = new LibraryDbContext())
-        //    {
-        //        var reader = db.Readers.Include(r => r.UserCredential)
-        //                               .FirstOrDefault(r => r.UserCredentialId == _userId);
-        //        if (reader != null)
-        //        {
-        //            welcomeLabel.Text = $"Witaj, {reader.FirstName}";
-        //        }
-        //    }
-        //}
+        public ReaderMainForm()
+        {
+            InitializeComponent();
+            LoadBooks();
+            LoadRentals();
+        }
 
-        //private void LoadBooks()
-        //{
-        //    using (var db = new LibraryDbContext())
-        //    {
-        //        var books = db.Books.Include(b => b.Author)
-        //                            .Select(b => new
-        //                            {
-        //                                Tytuł = b.Title,
-        //                                Autor = b.Author.Name,
-        //                                Rok = b.YearPublished
-        //                            })
-        //                            .ToList();
+        private void LoadBooks()
+        {
+            using (var db = new LibraryDbContext())
+            {
+                var books = db.Books
+                    .Include(b => b.Author)
+                    .ToList();
 
-        //        booksDataGridView.DataSource = books;
-        //    }
-        //}
+                booksDataGridView.DataSource = books
+                    .Select(b => new
+                    {
+                        b.Title,
+                        Author = b.Author.AuthorFullName,
+                    }).ToList();
+            }
+        }
+
+        private void LoadRentals()
+        {
+            using (var db = new LibraryDbContext())
+            {
+                var rentals = db.Rentals
+                    .Include(r => r.Book)
+                    .Include(r => r.Reader)
+                    .Select(r => new
+                    {
+                        ID = r.RentalId,
+                        Title = r.Book.Title,
+                        Reader = r.Reader.FullName,
+                        RentalDate = r.RentalDate.ToShortDateString(),
+                        ReturnDate = r.ReturnDate.HasValue ? r.ReturnDate.Value.ToShortDateString() : "–"
+                    })
+                    .ToList();
+
+                myRentalsDataGridView.DataSource = rentals;
+            }
+        }
+
+
+        private void LoadUserData()
+        {
+            using (var db = new LibraryDbContext())
+            {
+                var reader = db.Readers.Include(r => r.UserCredentials)
+                                       .FirstOrDefault(r => r.UserCredentials.ReaderId == _userId);
+                if (reader != null)
+                {
+                    welcomeLabel.Text = $"Welcome, {reader.FullName}";
+                }
+            }
+        }
 
         private void logoutButton_Click(object sender, EventArgs e)
         {

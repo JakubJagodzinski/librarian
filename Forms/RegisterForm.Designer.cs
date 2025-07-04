@@ -157,6 +157,7 @@
             passwordTextBox.PlaceholderText = "************";
             passwordTextBox.Size = new Size(121, 23);
             passwordTextBox.TabIndex = 14;
+            passwordTextBox.UseSystemPasswordChar = true;
             // 
             // confirmPasswordTextBox
             // 
@@ -165,6 +166,7 @@
             confirmPasswordTextBox.PlaceholderText = "************";
             confirmPasswordTextBox.Size = new Size(121, 23);
             confirmPasswordTextBox.TabIndex = 15;
+            confirmPasswordTextBox.UseSystemPasswordChar = true;
             // 
             // RegisterForm
             // 

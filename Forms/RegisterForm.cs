@@ -62,7 +62,11 @@ namespace librarian.Forms
             }
             else if (role == "Employee")
             {
-                var emp = new Employee { };
+                var emp = new Employee {
+                    FullName= fullNameTextBox.Text,
+                    Email = emailTextBox.Text,
+                    PhoneNumber = phoneNumberTextBox.Text
+                };
                 var reader = new Employee
                 {
                     FullName = fullNameTextBox.Text,
