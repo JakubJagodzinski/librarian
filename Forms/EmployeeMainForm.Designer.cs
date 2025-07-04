@@ -33,14 +33,20 @@
             tabControl1 = new TabControl();
             booksTabPage = new TabPage();
             booksDataGridView = new DataGridView();
-            Readers = new TabPage();
+            readersTabPage = new TabPage();
             blacklistReaderButton = new Button();
             readersDataGridView = new DataGridView();
+            blacklistedReadersTabPage = new TabPage();
+            removeFromBlacklistButton = new Button();
+            blacklistedReadersDataGridView = new DataGridView();
+            pageSetupDialog1 = new PageSetupDialog();
             tabControl1.SuspendLayout();
             booksTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)booksDataGridView).BeginInit();
-            Readers.SuspendLayout();
+            readersTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)readersDataGridView).BeginInit();
+            blacklistedReadersTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)blacklistedReadersDataGridView).BeginInit();
             SuspendLayout();
             // 
             // welcomeLabel
@@ -65,12 +71,15 @@
             // tabControl1
             // 
             tabControl1.Controls.Add(booksTabPage);
-            tabControl1.Controls.Add(Readers);
+            tabControl1.Controls.Add(readersTabPage);
+            tabControl1.Controls.Add(blacklistedReadersTabPage);
             tabControl1.Location = new Point(30, 72);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(743, 328);
             tabControl1.TabIndex = 2;
+            tabControl1.SelectedIndexChanged += tabControl1_SelectedIndexChanged;
+
             // 
             // booksTabPage
             // 
@@ -91,25 +100,25 @@
             booksDataGridView.Size = new Size(735, 320);
             booksDataGridView.TabIndex = 0;
             // 
-            // Readers
+            // readersTabPage
             // 
-            Readers.Controls.Add(blacklistReaderButton);
-            Readers.Controls.Add(readersDataGridView);
-            Readers.Location = new Point(4, 24);
-            Readers.Name = "Readers";
-            Readers.Padding = new Padding(3);
-            Readers.Size = new Size(735, 300);
-            Readers.TabIndex = 1;
-            Readers.Text = "Readers";
-            Readers.UseVisualStyleBackColor = true;
+            readersTabPage.Controls.Add(blacklistReaderButton);
+            readersTabPage.Controls.Add(readersDataGridView);
+            readersTabPage.Location = new Point(4, 24);
+            readersTabPage.Name = "readersTabPage";
+            readersTabPage.Padding = new Padding(3);
+            readersTabPage.Size = new Size(735, 300);
+            readersTabPage.TabIndex = 1;
+            readersTabPage.Text = "Readers";
+            readersTabPage.UseVisualStyleBackColor = true;
             // 
             // blacklistReaderButton
             // 
             blacklistReaderButton.Location = new Point(652, 6);
             blacklistReaderButton.Name = "blacklistReaderButton";
-            blacklistReaderButton.Size = new Size(75, 62);
+            blacklistReaderButton.Size = new Size(75, 41);
             blacklistReaderButton.TabIndex = 1;
-            blacklistReaderButton.Text = "blacklist selected reader";
+            blacklistReaderButton.Text = "Blacklist reader";
             blacklistReaderButton.UseVisualStyleBackColor = true;
             blacklistReaderButton.Click += blacklistReaderButton_Click;
             // 
@@ -121,6 +130,37 @@
             readersDataGridView.Size = new Size(645, 300);
             readersDataGridView.TabIndex = 0;
             readersDataGridView.CellClick += readersDataGridView_CellClick;
+            // 
+            // blacklistedReadersTabPage
+            // 
+            blacklistedReadersTabPage.Controls.Add(removeFromBlacklistButton);
+            blacklistedReadersTabPage.Controls.Add(blacklistedReadersDataGridView);
+            blacklistedReadersTabPage.Location = new Point(4, 24);
+            blacklistedReadersTabPage.Name = "blacklistedReadersTabPage";
+            blacklistedReadersTabPage.Padding = new Padding(3);
+            blacklistedReadersTabPage.Size = new Size(735, 300);
+            blacklistedReadersTabPage.TabIndex = 2;
+            blacklistedReadersTabPage.Text = "Blacklisted readers";
+            blacklistedReadersTabPage.UseVisualStyleBackColor = true;
+            // 
+            // removeFromBlacklistButton
+            // 
+            removeFromBlacklistButton.Location = new Point(651, 6);
+            removeFromBlacklistButton.Name = "removeFromBlacklistButton";
+            removeFromBlacklistButton.Size = new Size(75, 58);
+            removeFromBlacklistButton.TabIndex = 1;
+            removeFromBlacklistButton.Text = "Remove from blacklist";
+            removeFromBlacklistButton.UseVisualStyleBackColor = true;
+            removeFromBlacklistButton.Click += removeFromBlacklistButton_Click;
+            // 
+            // blacklistedReadersDataGridView
+            // 
+            blacklistedReadersDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            blacklistedReadersDataGridView.Location = new Point(0, 0);
+            blacklistedReadersDataGridView.Name = "blacklistedReadersDataGridView";
+            blacklistedReadersDataGridView.Size = new Size(645, 300);
+            blacklistedReadersDataGridView.TabIndex = 0;
+            blacklistedReadersDataGridView.CellClick += blacklistedReadersDataGridView_CellClick;
             // 
             // EmployeeMainForm
             // 
@@ -136,8 +176,10 @@
             tabControl1.ResumeLayout(false);
             booksTabPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)booksDataGridView).EndInit();
-            Readers.ResumeLayout(false);
+            readersTabPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)readersDataGridView).EndInit();
+            blacklistedReadersTabPage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)blacklistedReadersDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -149,9 +191,13 @@
         private TabControl tabControl1;
         private TabPage booksTabPage;
         private DataGridView booksDataGridView;
-        private TabPage Readers;
+        private TabPage readersTabPage;
         private DataGridView readersDataGridView;
         private Button blacklistReaderButton;
         private Button removeReaderFromBlacklistButton;
+        private TabPage blacklistedReadersTabPage;
+        private PageSetupDialog pageSetupDialog1;
+        private DataGridView blacklistedReadersDataGridView;
+        private Button removeFromBlacklistButton;
     }
 }
