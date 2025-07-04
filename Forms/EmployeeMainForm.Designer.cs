@@ -34,6 +34,7 @@
             booksTabPage = new TabPage();
             booksDataGridView = new DataGridView();
             Readers = new TabPage();
+            blacklistReaderButton = new Button();
             readersDataGridView = new DataGridView();
             tabControl1.SuspendLayout();
             booksTabPage.SuspendLayout();
@@ -68,7 +69,7 @@
             tabControl1.Location = new Point(30, 72);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(743, 348);
+            tabControl1.Size = new Size(743, 328);
             tabControl1.TabIndex = 2;
             // 
             // booksTabPage
@@ -77,7 +78,7 @@
             booksTabPage.Location = new Point(4, 24);
             booksTabPage.Name = "booksTabPage";
             booksTabPage.Padding = new Padding(3);
-            booksTabPage.Size = new Size(735, 320);
+            booksTabPage.Size = new Size(735, 300);
             booksTabPage.TabIndex = 0;
             booksTabPage.Text = "Books";
             booksTabPage.UseVisualStyleBackColor = true;
@@ -92,22 +93,34 @@
             // 
             // Readers
             // 
+            Readers.Controls.Add(blacklistReaderButton);
             Readers.Controls.Add(readersDataGridView);
             Readers.Location = new Point(4, 24);
             Readers.Name = "Readers";
             Readers.Padding = new Padding(3);
-            Readers.Size = new Size(735, 320);
+            Readers.Size = new Size(735, 300);
             Readers.TabIndex = 1;
             Readers.Text = "Readers";
             Readers.UseVisualStyleBackColor = true;
+            // 
+            // blacklistReaderButton
+            // 
+            blacklistReaderButton.Location = new Point(652, 6);
+            blacklistReaderButton.Name = "blacklistReaderButton";
+            blacklistReaderButton.Size = new Size(75, 62);
+            blacklistReaderButton.TabIndex = 1;
+            blacklistReaderButton.Text = "blacklist selected reader";
+            blacklistReaderButton.UseVisualStyleBackColor = true;
+            blacklistReaderButton.Click += blacklistReaderButton_Click;
             // 
             // readersDataGridView
             // 
             readersDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             readersDataGridView.Location = new Point(0, 0);
             readersDataGridView.Name = "readersDataGridView";
-            readersDataGridView.Size = new Size(735, 320);
+            readersDataGridView.Size = new Size(645, 300);
             readersDataGridView.TabIndex = 0;
+            readersDataGridView.CellClick += readersDataGridView_CellClick;
             // 
             // EmployeeMainForm
             // 
@@ -138,5 +151,7 @@
         private DataGridView booksDataGridView;
         private TabPage Readers;
         private DataGridView readersDataGridView;
+        private Button blacklistReaderButton;
+        private Button removeReaderFromBlacklistButton;
     }
 }

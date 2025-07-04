@@ -8,6 +8,8 @@ namespace librarian.Forms
 
         private readonly int _userId;
 
+        private int? selectedReaderId = null;
+
         public EmployeeMainForm(int userId)
         {
             InitializeComponent();
@@ -38,7 +40,7 @@ namespace librarian.Forms
                         Email = r?.Email ?? "",
                         PhoneNumber = r?.PhoneNumber ?? "",
                         r?.DateOfBirth,
-                        
+
                     }).ToList();
             }
         }
@@ -84,5 +86,33 @@ namespace librarian.Forms
             loginForm.Show();
             this.Hide();
         }
+
+        private void readersDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                var row = readersDataGridView.Rows[e.RowIndex];
+                selectedReaderId = Convert.ToInt32(row.Cells["ReaderId"].Value);
+
+                MessageBox.Show($"Selected ReaderId: {selectedReaderId}");
+            }
+        }
+
+        private void blacklistReaderButton_Click(object sender, EventArgs e)
+        {
+            if (selectedReaderId == null)
+            {
+                MessageBox.Show("You have to select reader you want to blacklist.");
+                return;
+            }
+
+            var blacklistReaderForm = new BlacklistReaderForm(selectedReaderId.Value, this);
+            blacklistReaderForm.StartPosition = FormStartPosition.Manual;
+            blacklistReaderForm.Location = this.Location;
+
+            this.Hide();
+            blacklistReaderForm.Show();
+        }
+
     }
 }
