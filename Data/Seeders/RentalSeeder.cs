@@ -4,10 +4,19 @@ namespace librarian.Data.Seeders
 {
     public class RentalSeeder : ISeeder
     {
+        private void ClearTable(LibraryDbContext context)
+        {
+            var rentals = context.Rentals.ToList();
+            context.Rentals.RemoveRange(rentals);
+            context.SaveChanges();
+        }
+
         public void Seed(LibraryDbContext context)
         {
             try
             {
+                ClearTable(context);
+
                 if (!context.Rentals.Any())
                 {
                     var readers = context.Readers.ToList();

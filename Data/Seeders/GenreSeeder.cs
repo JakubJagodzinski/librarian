@@ -4,10 +4,23 @@ namespace librarian.Data.Seeders
 {
     internal class GenreSeeder : ISeeder
     {
+        private void ClearTable(LibraryDbContext context)
+        {
+            var bookGenres = context.BookGenres.ToList();
+            context.BookGenres.RemoveRange(bookGenres);
+
+            var genres = context.Genres.ToList();
+            context.Genres.RemoveRange(genres);
+
+            context.SaveChanges();
+        }
+
         public void Seed(LibraryDbContext context)
         {
             try
             {
+                ClearTable(context);
+
                 if (!context.Genres.Any())
                 {
                     var genres = new List<Genre>

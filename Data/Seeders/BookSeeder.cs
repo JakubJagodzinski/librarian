@@ -4,10 +4,23 @@ namespace librarian.Data.Seeders
 {
     internal class BookSeeder : ISeeder
     {
+        private void ClearTable(LibraryDbContext context)
+        {
+            var bookGenres = context.BookGenres.ToList();
+            context.BookGenres.RemoveRange(bookGenres);
+
+            var books = context.Books.ToList();
+            context.Books.RemoveRange(books);
+
+            context.SaveChanges();
+        }
+
         public void Seed(LibraryDbContext context)
         {
             try
             {
+                ClearTable(context);
+
                 if (!context.Books.Any())
                 {
                     var authors = context.Authors.Take(10).ToList();
@@ -20,6 +33,8 @@ namespace librarian.Data.Seeders
 
                     var books = new List<Book>();
 
+                    var random = new Random();
+
                     foreach (var author in authors)
                     {
                         books.Add(new Book
@@ -27,7 +42,8 @@ namespace librarian.Data.Seeders
                             Title = $"{author.AuthorFullName}'s First Book",
                             AuthorId = author.AuthorId,
                             PublishedYear = 2010 + author.AuthorId % 10,
-                            Pages = 100 + author.AuthorId * 10
+                            Pages = random.Next(500) + 100,
+                            InStock = random.Next(10)
                         });
 
                         books.Add(new Book
@@ -35,7 +51,8 @@ namespace librarian.Data.Seeders
                             Title = $"{author.AuthorFullName}'s Second Book",
                             AuthorId = author.AuthorId,
                             PublishedYear = 2015 + author.AuthorId % 5,
-                            Pages = 150 + author.AuthorId * 12
+                            Pages = random.Next(500) + 100,
+                            InStock = random.Next(10)
                         });
                     }
 

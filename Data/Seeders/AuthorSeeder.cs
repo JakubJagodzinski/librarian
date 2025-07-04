@@ -4,11 +4,27 @@ namespace librarian.Data.Seeders
 {
     public class AuthorSeeder : ISeeder
     {
+
+        private void ClearTable(LibraryDbContext context)
+        {
+            var books = context.Books.ToList();
+            context.Books.RemoveRange(books);
+
+            var authors = context.Authors.ToList();
+            context.Authors.RemoveRange(authors);
+
+            context.SaveChanges();
+        }
+
         public void Seed(LibraryDbContext context)
         {
-            if (!context.Authors.Any())
+            try
             {
-                var authors = new List<Author>
+                ClearTable(context);
+
+                if (!context.Authors.Any())
+                {
+                    var authors = new List<Author>
                 {
                     new Author { AuthorFullName = "John Smith" },
                     new Author { AuthorFullName = "Jane Doe" },
@@ -40,8 +56,13 @@ namespace librarian.Data.Seeders
                     new Author { AuthorFullName = "Agatha Christie" }
                 };
 
-                context.Authors.AddRange(authors);
-                context.SaveChanges();
+                    context.Authors.AddRange(authors);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Author seeding error: {ex.Message}\nInner: {ex.InnerException?.Message}", "Seeder Error");
             }
         }
     }

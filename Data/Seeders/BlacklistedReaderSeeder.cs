@@ -4,13 +4,23 @@ namespace librarian.Data.Seeders
 {
     internal class BlacklistedReaderSeeder : ISeeder
     {
+        private void ClearTable(LibraryDbContext context)
+        {
+            var blacklist = context.BlacklistedReaders.ToList();
+            context.BlacklistedReaders.RemoveRange(blacklist);
+            context.SaveChanges();
+        }
+
+
         public void Seed(LibraryDbContext context)
         {
             try
             {
+                ClearTable(context);
+
                 if (!context.BlacklistedReaders.Any())
                 {
-                    var readers = context.Readers.Take(5).ToList(); // Weź pierwszych 5 czytelników
+                    var readers = context.Readers.Take(5).ToList();
 
                     var blacklist = readers.Select((reader, index) => new BlacklistedReader
                     {
