@@ -79,7 +79,7 @@ namespace librarian.Forms
             loginForm.StartPosition = FormStartPosition.Manual;
             loginForm.Location = this.Location;
             loginForm.Show();
-            this.Close();
+            this.Hide();
         }
     }
 }
