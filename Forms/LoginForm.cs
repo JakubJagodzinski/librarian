@@ -8,6 +8,8 @@ namespace librarian.Forms
         public LoginForm()
         {
             InitializeComponent();
+
+            this.Text = "Librarian";
         }
 
         private void loginButton_Click(object sender, EventArgs e)

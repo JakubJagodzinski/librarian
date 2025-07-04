@@ -15,6 +15,8 @@ namespace librarian.Forms
             _readerId = readerId;
             LoadReaderInfo();
             _employeeMainForm = employeeMainForm;
+
+            this.Text = "Librarian";
         }
 
         private void LoadReaderInfo()

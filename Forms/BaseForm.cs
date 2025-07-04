@@ -11,6 +11,8 @@ namespace librarian.Forms
         public BaseForm()
         {
             this.FormClosed += (s, e) => Application.Exit();
+
+            this.Icon = new Icon("Assets/librarian.ico");
         }
     }
 }

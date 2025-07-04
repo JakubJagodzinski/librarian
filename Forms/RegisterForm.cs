@@ -13,6 +13,7 @@ namespace librarian.Forms
             roleComboBox.Items.Add("Employee");
             roleComboBox.SelectedIndex = 0;
 
+            this.Text = "Librarian";
         }
         private void registerButton_Click(object sender, EventArgs e)
         {

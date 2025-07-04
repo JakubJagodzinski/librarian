@@ -16,6 +16,8 @@ namespace librarian.Forms
             LoadUserData();
             LoadBooks();
             LoadRentals();
+
+            this.Text = "Librarian";
         }
 
         private void LoadBooks()

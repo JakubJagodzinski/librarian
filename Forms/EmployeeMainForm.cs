@@ -22,6 +22,8 @@ namespace librarian.Forms
             LoadBooks();
             LoadReaders();
             LoadBlacklistedReaders();
+
+            this.Text = "Librarian";
         }
 
         private void EmployeeMainForm_Load(object sender, EventArgs e)
