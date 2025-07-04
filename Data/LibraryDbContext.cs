@@ -15,6 +15,8 @@ namespace librarian.Data
         public DbSet<BookGenre> BookGenres { get; set; }
         public DbSet<BlacklistedReader> BlacklistedReaders { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<UserCredentials> UserCredentials { get; set; }
+        public object UserCredential { get; internal set; }
 
         // Configure the database connection
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
