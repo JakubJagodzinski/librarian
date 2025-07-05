@@ -1,5 +1,6 @@
 using librarian.Data;
 using librarian.Data.Managers;
+using librarian.Data.Views;
 using librarian.Forms;
 
 namespace librarian
@@ -33,6 +34,9 @@ namespace librarian
 
                 var functionManager = new FunctionManager(context);
                 functionManager.CreateFunctions();
+
+                var viewManager = new ViewManager(context);
+                viewManager.CreateViews();
             }
 
             Application.Run(new LoginForm());

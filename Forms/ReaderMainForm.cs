@@ -152,23 +152,21 @@ namespace librarian.Forms
             using (var db = new LibraryDbContext())
             {
                 var rentals = new SortableBindingList<MyRentalDisplayDto>(
-                    db.Rentals
-                        .Include(r => r.Book)
-                        .Include(r => r.Reader)
-                        .Where(r => r.ReaderId == _userId && r.ReturnDate == null)
+                    db.ActiveRentalViews
+                        .Where(r => r.ReaderId == _userId)
                         .Select(r => new MyRentalDisplayDto
                         {
                             RentalId = r.RentalId,
-                            BookTitle = r.Book.Title,
+                            BookTitle = r.BookTitle,
                             RentalDate = r.RentalDate,
                             PlannedReturnDate = r.PlannedReturnDate
                         })
-                        .ToList());
+                        .ToList()
+                );
 
                 myRentalsDataGridView.DataSource = rentals;
 
                 myRentalsDataGridView.Columns["RentalId"].Visible = false;
-
                 myRentalsDataGridView.Columns["RentalDate"].DefaultCellStyle.Format = "dd.MM.yyyy";
                 myRentalsDataGridView.Columns["PlannedReturnDate"].DefaultCellStyle.Format = "dd.MM.yyyy";
 

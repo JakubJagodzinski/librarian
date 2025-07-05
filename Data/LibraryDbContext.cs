@@ -16,6 +16,8 @@ namespace librarian.Data
         public DbSet<BlacklistedReader> BlacklistedReaders { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<UserCredentials> UserCredentials { get; set; }
+        public DbSet<ActiveRentalView> ActiveRentalViews { get; set; }
+
         public object UserCredential { get; internal set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -67,6 +69,10 @@ namespace librarian.Data
                 .HasOne(br => br.Reader)
                 .WithMany(r => r.BlacklistedEntries)
                 .HasForeignKey(br => br.ReaderId);
+
+            modelBuilder.Entity<ActiveRentalView>()
+                .HasNoKey()
+                .ToView("View_ActiveRentals");
 
             base.OnModelCreating(modelBuilder);
         }
