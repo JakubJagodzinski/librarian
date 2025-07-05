@@ -4,7 +4,7 @@ namespace librarian.Data.Seeders
 {
     internal class BookGenreSeeder : ISeeder
     {
-        public void Seed(LibraryDbContext context)
+        public void Seed(LibraryDbContext context, bool clearTable)
         {
             try
             {
@@ -15,7 +15,7 @@ namespace librarian.Data.Seeders
 
                     if (genres.Count < 3)
                     {
-                        MessageBox.Show("Za mało gatunków, potrzebne co najmniej 3.", "Seeder Error");
+                        MessageBox.Show("Not enough genres, required at least 3.", "Seeder Error");
                         return;
                     }
 

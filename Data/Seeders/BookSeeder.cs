@@ -15,11 +15,14 @@ namespace librarian.Data.Seeders
             context.SaveChanges();
         }
 
-        public void Seed(LibraryDbContext context)
+        public void Seed(LibraryDbContext context, bool clearTable)
         {
             try
             {
-                ClearTable(context);
+                if (clearTable)
+                {
+                    ClearTable(context);
+                }
 
                 if (!context.Books.Any())
                 {
@@ -27,7 +30,7 @@ namespace librarian.Data.Seeders
 
                     if (!authors.Any())
                     {
-                        MessageBox.Show("Brak autorów do utworzenia książek.", "Seeder Info");
+                        MessageBox.Show("No authors.", "Seeder Info");
                         return;
                     }
 

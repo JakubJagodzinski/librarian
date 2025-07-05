@@ -16,12 +16,15 @@ namespace librarian.Data.Seeders
             context.SaveChanges();
         }
 
-        public void Seed(LibraryDbContext context)
+        public void Seed(LibraryDbContext context, bool clearTable)
         {
             context.Employees.RemoveRange();
             try
             {
-                ClearTable(context);
+                if (clearTable)
+                {
+                    ClearTable(context);
+                }
 
                 if (!context.Employees.Any())
                 {

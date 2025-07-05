@@ -7,6 +7,8 @@ namespace librarian.Forms
     {
         private readonly int _userId;
 
+        private int? _selectedRentalId = null;
+
         private BaseForm _loginForm;
 
         public ReaderMainForm(int userId, BaseForm loginForm)
@@ -29,17 +31,18 @@ namespace librarian.Forms
             {
                 var books = db.Books
                     .Include(b => b.Author)
-                    .ToList();
-
-                booksDataGridView.DataSource = books
                     .Select(b => new
                     {
+                        b.BookId,
                         b.Title,
-                        Author = b.Author?.AuthorFullName ?? "",
+                        Author = b.Author.AuthorFullName,
                         b.PublishedYear,
                         b.Pages,
                         b.InStock
                     }).ToList();
+
+                booksDataGridView.DataSource = books;
+                booksDataGridView.Columns["BookId"].Visible = false;
             }
         }
 
@@ -50,20 +53,20 @@ namespace librarian.Forms
                 var rentals = db.Rentals
                     .Include(r => r.Book)
                     .Include(r => r.Reader)
-                    .Where(r => r.ReaderId == _userId)
+                    .Where(r => r.ReaderId == _userId && r.ReturnDate == null)
                     .Select(r => new
                     {
-                        ID = r.RentalId,
-                        Title = r.Book.Title,
+                        r.RentalId,
+                        r.Book.Title,
                         RentalDate = r.RentalDate.ToShortDateString(),
-                        ReturnDate = r.ReturnDate.HasValue ? r.ReturnDate.Value.ToShortDateString() : "–"
+                        PlannedReturnDate = r.PlannedReturnDate.ToShortDateString()
                     })
                     .ToList();
 
                 myRentalsDataGridView.DataSource = rentals;
+                myRentalsDataGridView.Columns["RentalId"].Visible = false;
             }
         }
-
 
         private void LoadUserData()
         {
@@ -84,5 +87,60 @@ namespace librarian.Forms
             this.Hide();
         }
 
+        private void rentalsDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                var row = myRentalsDataGridView.Rows[e.RowIndex];
+                _selectedRentalId = Convert.ToInt32(row.Cells["RentalId"].Value);
+
+                //MessageBox.Show($"Selected RentalId: {selectedRentalId}");
+            }
+        }
+
+        private void endRentalButton_Click(object sender, EventArgs e)
+        {
+            if (_selectedRentalId == null)
+            {
+                MessageBox.Show("Please select a rental to end.");
+                return;
+            }
+
+            var confirmResult = MessageBox.Show("Are you sure you want to end this rental?", "Confirm End Rental", MessageBoxButtons.YesNo);
+
+            if (confirmResult == DialogResult.No)
+            {
+                return;
+            }
+
+            using (var db = new LibraryDbContext())
+            {
+                var rental = db.Rentals
+                               .Include(r => r.Book)
+                               .FirstOrDefault(r => r.RentalId == _selectedRentalId);
+
+                if (rental != null)
+                {
+                    if (rental.ReturnDate != null)
+                    {
+                        MessageBox.Show("This rental is already ended.");
+                        return;
+                    }
+
+                    rental.ReturnDate = DateTime.Now;
+                    rental.Book.InStock += 1;
+
+                    db.SaveChanges();
+
+                    MessageBox.Show("Rental successfully ended.");
+                    LoadRentals();
+                    LoadBooks();
+                }
+                else
+                {
+                    MessageBox.Show("Rental not found.");
+                }
+            }
+        }
     }
 }

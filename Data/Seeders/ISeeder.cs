@@ -2,6 +2,6 @@
 {
     public interface ISeeder
     {
-        void Seed(LibraryDbContext context);
+        void Seed(LibraryDbContext context, bool clearTable);
     }
 }

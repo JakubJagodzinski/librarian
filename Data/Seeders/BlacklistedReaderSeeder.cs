@@ -12,11 +12,14 @@ namespace librarian.Data.Seeders
         }
 
 
-        public void Seed(LibraryDbContext context)
+        public void Seed(LibraryDbContext context, bool clearTable)
         {
             try
             {
-                ClearTable(context);
+                if (clearTable)
+                {
+                    ClearTable(context);
+                }
 
                 if (!context.BlacklistedReaders.Any())
                 {

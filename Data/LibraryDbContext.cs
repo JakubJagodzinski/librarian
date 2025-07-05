@@ -103,7 +103,7 @@ namespace librarian.Data
 
             foreach (var seeder in seeders)
             {
-                seeder.Seed(this);
+                seeder.Seed(this, true);
             }
         }
 

@@ -11,11 +11,14 @@ namespace librarian.Data.Seeders
             context.SaveChanges();
         }
 
-        public void Seed(LibraryDbContext context)
+        public void Seed(LibraryDbContext context, bool clearTable)
         {
             try
             {
-                ClearTable(context);
+                if (clearTable)
+                {
+                    ClearTable(context);
+                }
 
                 if (!context.Rentals.Any())
                 {
@@ -24,7 +27,7 @@ namespace librarian.Data.Seeders
 
                     if (!readers.Any() || !books.Any())
                     {
-                        MessageBox.Show("Brak czytelników lub książek do utworzenia wypożyczeń.", "Seeder Info");
+                        MessageBox.Show("No readers or books to create rentals.", "Seeder Info");
                         return;
                     }
 
@@ -36,6 +39,7 @@ namespace librarian.Data.Seeders
                         var reader = readers[random.Next(readers.Count)];
                         var book = books[random.Next(books.Count)];
                         var rentalDate = DateTime.Now.AddDays(-random.Next(1, 60));
+                        DateTime plannerReturnDate = rentalDate.AddDays(random.Next(1, 30));
                         DateTime? returnDate = random.Next(0, 2) == 0 ? null : rentalDate.AddDays(random.Next(1, 30));
 
                         rentals.Add(new Rental
@@ -43,6 +47,7 @@ namespace librarian.Data.Seeders
                             ReaderId = reader.ReaderId,
                             BookId = book.BookId,
                             RentalDate = rentalDate,
+                            PlannedReturnDate = plannerReturnDate,
                             ReturnDate = returnDate
                         });
                     }
