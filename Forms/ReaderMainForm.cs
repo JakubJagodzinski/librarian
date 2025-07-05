@@ -1,6 +1,7 @@
 ﻿using librarian.Data;
 using librarian.Models;
 using Microsoft.EntityFrameworkCore;
+using ScottPlot;
 
 namespace librarian.Forms
 {
@@ -66,6 +67,10 @@ namespace librarian.Forms
             if (mainTabControl.SelectedTab == mainTabControl.TabPages["rentalsHistoryTabPage"])
             {
                 LoadRentalsHistory();
+            }
+            if (mainTabControl.SelectedTab == mainTabControl.TabPages["statisticsTabPage"])
+            {
+                // todo
             }
         }
 
@@ -285,6 +290,61 @@ namespace librarian.Forms
                 }
             }
         }
+
+        private void loadStatisticsButton_Click(object sender, EventArgs e)
+        {
+            DateTime startDate = startDatePicker.Value.Date;
+            DateTime endDate = endDatePicker.Value.Date;
+
+            if (startDate > endDate)
+            {
+                MessageBox.Show("Start date must be before end date.");
+                return;
+            }
+
+            using (var db = new LibraryDbContext())
+            {
+                var rentals = db.Rentals
+                    .Where(r => r.ReaderId == _userId &&
+                                r.RentalDate >= startDate &&
+                                r.RentalDate <= endDate)
+                    .ToList();
+
+                if (rentals.Count == 0)
+                {
+                    MessageBox.Show("No rentals found in the selected date range.");
+                    formsPlot.Plot.Clear();
+                    formsPlot.Refresh();
+                    totalRentalsLabel.Text = "Total Rentals: 0";
+                    return;
+                }
+
+                var grouped = rentals
+                    .GroupBy(r => r.RentalDate.Date)
+                    .ToDictionary(g => g.Key, g => g.Count());
+
+                var allDates = Enumerable.Range(0, (endDate - startDate).Days + 1)
+                    .Select(offset => startDate.AddDays(offset))
+                    .ToList();
+
+                double[] xDates = allDates.Select(d => d.ToOADate()).ToArray();
+                double[] yCounts = allDates.Select(d => grouped.ContainsKey(d) ? grouped[d] : 0).Select(c => (double)c).ToArray();
+
+                var plt = formsPlot.Plot;
+                plt.Clear();
+                plt.Add.Scatter(xDates, yCounts);
+                plt.Axes.DateTimeTicksBottom();
+                plt.Axes.Left.Label.Text = "Number of Rentals";
+                plt.Axes.Left.TickGenerator = new ScottPlot.TickGenerators.NumericFixedInterval(1);
+                plt.Axes.Bottom.Label.Text = "Date";
+                plt.Title("My Rentals Over Time");
+
+                formsPlot.Refresh();
+
+                totalRentalsLabel.Text = $"Total Rentals: {rentals.Count}";
+            }
+        }
+
 
     }
 }

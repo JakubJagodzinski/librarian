@@ -32,6 +32,7 @@
             logoutButton = new Button();
             mainTabControl = new TabControl();
             booksTabPage = new TabPage();
+            rentBookButton = new Button();
             booksDataGridView = new DataGridView();
             myRentalsTabPage = new TabPage();
             endRentalButton = new Button();
@@ -39,7 +40,14 @@
             myAccountTabPage = new TabPage();
             rentalsHistoryTabPage = new TabPage();
             rentalsHistoryDataGridView = new DataGridView();
-            rentBookButton = new Button();
+            statisticsTabPage = new TabPage();
+            loadStatisticsButton = new Button();
+            endDateLabel = new Label();
+            endDatePicker = new DateTimePicker();
+            startDateLabel = new Label();
+            startDatePicker = new DateTimePicker();
+            totalRentalsLabel = new Label();
+            formsPlot = new ScottPlot.WinForms.FormsPlot();
             mainTabControl.SuspendLayout();
             booksTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)booksDataGridView).BeginInit();
@@ -47,6 +55,7 @@
             ((System.ComponentModel.ISupportInitialize)myRentalsDataGridView).BeginInit();
             rentalsHistoryTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)rentalsHistoryDataGridView).BeginInit();
+            statisticsTabPage.SuspendLayout();
             SuspendLayout();
             // 
             // welcomeLabel
@@ -74,6 +83,7 @@
             mainTabControl.Controls.Add(myRentalsTabPage);
             mainTabControl.Controls.Add(myAccountTabPage);
             mainTabControl.Controls.Add(rentalsHistoryTabPage);
+            mainTabControl.Controls.Add(statisticsTabPage);
             mainTabControl.Location = new Point(22, 43);
             mainTabControl.Name = "mainTabControl";
             mainTabControl.SelectedIndex = 0;
@@ -92,6 +102,16 @@
             booksTabPage.TabIndex = 0;
             booksTabPage.Text = "Books";
             booksTabPage.UseVisualStyleBackColor = true;
+            // 
+            // rentBookButton
+            // 
+            rentBookButton.Location = new Point(651, 6);
+            rentBookButton.Name = "rentBookButton";
+            rentBookButton.Size = new Size(86, 23);
+            rentBookButton.TabIndex = 1;
+            rentBookButton.Text = "Rent a book";
+            rentBookButton.UseVisualStyleBackColor = true;
+            rentBookButton.Click += rentBookButton_Click;
             // 
             // booksDataGridView
             // 
@@ -162,15 +182,81 @@
             rentalsHistoryDataGridView.Size = new Size(743, 367);
             rentalsHistoryDataGridView.TabIndex = 0;
             // 
-            // rentBookButton
+            // statisticsTabPage
             // 
-            rentBookButton.Location = new Point(651, 6);
-            rentBookButton.Name = "rentBookButton";
-            rentBookButton.Size = new Size(86, 23);
-            rentBookButton.TabIndex = 1;
-            rentBookButton.Text = "Rent a book";
-            rentBookButton.UseVisualStyleBackColor = true;
-            rentBookButton.Click += rentBookButton_Click;
+            statisticsTabPage.Controls.Add(loadStatisticsButton);
+            statisticsTabPage.Controls.Add(endDateLabel);
+            statisticsTabPage.Controls.Add(endDatePicker);
+            statisticsTabPage.Controls.Add(startDateLabel);
+            statisticsTabPage.Controls.Add(startDatePicker);
+            statisticsTabPage.Controls.Add(totalRentalsLabel);
+            statisticsTabPage.Controls.Add(formsPlot);
+            statisticsTabPage.Location = new Point(4, 24);
+            statisticsTabPage.Name = "statisticsTabPage";
+            statisticsTabPage.Padding = new Padding(3);
+            statisticsTabPage.Size = new Size(743, 367);
+            statisticsTabPage.TabIndex = 4;
+            statisticsTabPage.Text = "Statistics";
+            statisticsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // loadStatisticsButton
+            // 
+            loadStatisticsButton.Location = new Point(116, 328);
+            loadStatisticsButton.Name = "loadStatisticsButton";
+            loadStatisticsButton.Size = new Size(101, 23);
+            loadStatisticsButton.TabIndex = 7;
+            loadStatisticsButton.Text = "Load statistics";
+            loadStatisticsButton.UseVisualStyleBackColor = true;
+            loadStatisticsButton.Click += loadStatisticsButton_Click;
+            // 
+            // endDateLabel
+            // 
+            endDateLabel.AutoSize = true;
+            endDateLabel.Location = new Point(17, 129);
+            endDateLabel.Name = "endDateLabel";
+            endDateLabel.Size = new Size(56, 15);
+            endDateLabel.TabIndex = 6;
+            endDateLabel.Text = "End date:";
+            // 
+            // endDatePicker
+            // 
+            endDatePicker.Location = new Point(17, 147);
+            endDatePicker.Name = "endDatePicker";
+            endDatePicker.Size = new Size(200, 23);
+            endDatePicker.TabIndex = 5;
+            // 
+            // startDateLabel
+            // 
+            startDateLabel.AutoSize = true;
+            startDateLabel.Location = new Point(17, 60);
+            startDateLabel.Name = "startDateLabel";
+            startDateLabel.Size = new Size(60, 15);
+            startDateLabel.TabIndex = 4;
+            startDateLabel.Text = "Start date:";
+            // 
+            // startDatePicker
+            // 
+            startDatePicker.Location = new Point(17, 78);
+            startDatePicker.Name = "startDatePicker";
+            startDatePicker.Size = new Size(200, 23);
+            startDatePicker.TabIndex = 3;
+            // 
+            // totalRentalsLabel
+            // 
+            totalRentalsLabel.AutoSize = true;
+            totalRentalsLabel.Location = new Point(17, 19);
+            totalRentalsLabel.Name = "totalRentalsLabel";
+            totalRentalsLabel.Size = new Size(82, 15);
+            totalRentalsLabel.TabIndex = 1;
+            totalRentalsLabel.Text = "Total rentals: ?";
+            // 
+            // formsPlot
+            // 
+            formsPlot.DisplayScale = 1F;
+            formsPlot.Location = new Point(324, 0);
+            formsPlot.Name = "formsPlot";
+            formsPlot.Size = new Size(419, 367);
+            formsPlot.TabIndex = 0;
             // 
             // ReaderMainForm
             // 
@@ -189,6 +275,8 @@
             ((System.ComponentModel.ISupportInitialize)myRentalsDataGridView).EndInit();
             rentalsHistoryTabPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)rentalsHistoryDataGridView).EndInit();
+            statisticsTabPage.ResumeLayout(false);
+            statisticsTabPage.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -207,5 +295,13 @@
         private TabPage rentalsHistoryTabPage;
         private DataGridView rentalsHistoryDataGridView;
         private Button rentBookButton;
+        private TabPage statisticsTabPage;
+        private Label endDateLabel;
+        private DateTimePicker endDatePicker;
+        private Label startDateLabel;
+        private DateTimePicker startDatePicker;
+        private Label totalRentalsLabel;
+        private ScottPlot.WinForms.FormsPlot formsPlot;
+        private Button loadStatisticsButton;
     }
 }

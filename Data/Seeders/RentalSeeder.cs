@@ -34,22 +34,39 @@ namespace librarian.Data.Seeders
                     var random = new Random();
                     var rentals = new List<Rental>();
 
-                    for (int i = 0; i < 10; i++)
+                    foreach (var reader in readers)
                     {
-                        var reader = readers[random.Next(readers.Count)];
-                        var book = books[random.Next(books.Count)];
-                        var rentalDate = DateTime.Now.AddDays(-random.Next(1, 60));
-                        DateTime plannerReturnDate = rentalDate.AddDays(random.Next(1, 30));
-                        DateTime? returnDate = random.Next(0, 2) == 0 ? null : rentalDate.AddDays(random.Next(1, 30));
+                        int rentalCount = 50;
 
-                        rentals.Add(new Rental
+                        for (int i = 0; i < rentalCount; i++)
                         {
-                            ReaderId = reader.ReaderId,
-                            BookId = book.BookId,
-                            RentalDate = rentalDate,
-                            PlannedReturnDate = plannerReturnDate,
-                            ReturnDate = returnDate
-                        });
+                            var book = books[random.Next(books.Count)];
+
+                            // Rental date: from 3 years ago up to today
+                            DateTime rentalDate = DateTime.Today.AddDays(-random.Next(0, 3 * 365));
+
+                            // Planned return date: 10-30 days after rental
+                            DateTime plannedReturnDate = rentalDate.AddDays(random.Next(10, 31));
+
+                            // Return date: maybe returned, maybe not
+                            DateTime? returnDate = null;
+                            if (random.NextDouble() < 0.7) // 70% chance it was returned
+                            {
+                                // Returned 1-60 days after rental
+                                returnDate = rentalDate.AddDays(random.Next(1, 61));
+                                if (returnDate > DateTime.Today)
+                                    returnDate = DateTime.Today; // no return dates in future
+                            }
+
+                            rentals.Add(new Rental
+                            {
+                                ReaderId = reader.ReaderId,
+                                BookId = book.BookId,
+                                RentalDate = rentalDate,
+                                PlannedReturnDate = plannedReturnDate,
+                                ReturnDate = returnDate
+                            });
+                        }
                     }
 
                     context.Rentals.AddRange(rentals);
