@@ -42,6 +42,11 @@
             removeFromBlacklistButton = new Button();
             blacklistedReadersDataGridView = new DataGridView();
             pageSetupDialog1 = new PageSetupDialog();
+            myAccountTabPage = new TabPage();
+            fullNameLabel = new Label();
+            emailLabel = new Label();
+            phoneNumberLabel = new Label();
+            hireDateLabel = new Label();
             tabControl1.SuspendLayout();
             booksTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)booksDataGridView).BeginInit();
@@ -49,6 +54,7 @@
             ((System.ComponentModel.ISupportInitialize)readersDataGridView).BeginInit();
             blacklistedReadersTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)blacklistedReadersDataGridView).BeginInit();
+            myAccountTabPage.SuspendLayout();
             SuspendLayout();
             // 
             // welcomeLabel
@@ -56,9 +62,9 @@
             welcomeLabel.AutoSize = true;
             welcomeLabel.Location = new Point(342, 29);
             welcomeLabel.Name = "welcomeLabel";
-            welcomeLabel.Size = new Size(57, 15);
+            welcomeLabel.Size = new Size(104, 15);
             welcomeLabel.TabIndex = 0;
-            welcomeLabel.Text = "Welcome";
+            welcomeLabel.Text = "Welcome, {name}!";
             // 
             // logoutButton
             // 
@@ -75,6 +81,7 @@
             tabControl1.Controls.Add(booksTabPage);
             tabControl1.Controls.Add(readersTabPage);
             tabControl1.Controls.Add(blacklistedReadersTabPage);
+            tabControl1.Controls.Add(myAccountTabPage);
             tabControl1.Location = new Point(30, 72);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -164,7 +171,7 @@
             blacklistedReadersTabPage.Padding = new Padding(3);
             blacklistedReadersTabPage.Size = new Size(735, 300);
             blacklistedReadersTabPage.TabIndex = 2;
-            blacklistedReadersTabPage.Text = "Blacklisted readers";
+            blacklistedReadersTabPage.Text = "Blacklisted Readers";
             blacklistedReadersTabPage.UseVisualStyleBackColor = true;
             // 
             // removeFromBlacklistButton
@@ -186,6 +193,56 @@
             blacklistedReadersDataGridView.TabIndex = 0;
             blacklistedReadersDataGridView.CellClick += blacklistedReadersDataGridView_CellClick;
             // 
+            // myAccountTabPage
+            // 
+            myAccountTabPage.Controls.Add(hireDateLabel);
+            myAccountTabPage.Controls.Add(phoneNumberLabel);
+            myAccountTabPage.Controls.Add(emailLabel);
+            myAccountTabPage.Controls.Add(fullNameLabel);
+            myAccountTabPage.Location = new Point(4, 24);
+            myAccountTabPage.Name = "myAccountTabPage";
+            myAccountTabPage.Padding = new Padding(3);
+            myAccountTabPage.Size = new Size(735, 300);
+            myAccountTabPage.TabIndex = 3;
+            myAccountTabPage.Text = "My Account";
+            myAccountTabPage.UseVisualStyleBackColor = true;
+            // 
+            // fullNameLabel
+            // 
+            fullNameLabel.AutoSize = true;
+            fullNameLabel.Location = new Point(29, 43);
+            fullNameLabel.Name = "fullNameLabel";
+            fullNameLabel.Size = new Size(70, 15);
+            fullNameLabel.TabIndex = 0;
+            fullNameLabel.Text = "Full name: ?";
+            // 
+            // emailLabel
+            // 
+            emailLabel.AutoSize = true;
+            emailLabel.Location = new Point(29, 90);
+            emailLabel.Name = "emailLabel";
+            emailLabel.Size = new Size(47, 15);
+            emailLabel.TabIndex = 1;
+            emailLabel.Text = "Email: ?";
+            // 
+            // phoneNumberLabel
+            // 
+            phoneNumberLabel.AutoSize = true;
+            phoneNumberLabel.Location = new Point(29, 141);
+            phoneNumberLabel.Name = "phoneNumberLabel";
+            phoneNumberLabel.Size = new Size(97, 15);
+            phoneNumberLabel.TabIndex = 2;
+            phoneNumberLabel.Text = "Phone number: ?";
+            // 
+            // hireDateLabel
+            // 
+            hireDateLabel.AutoSize = true;
+            hireDateLabel.Location = new Point(29, 193);
+            hireDateLabel.Name = "hireDateLabel";
+            hireDateLabel.Size = new Size(66, 15);
+            hireDateLabel.TabIndex = 3;
+            hireDateLabel.Text = "Hire date: ?";
+            // 
             // EmployeeMainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -203,6 +260,8 @@
             ((System.ComponentModel.ISupportInitialize)readersDataGridView).EndInit();
             blacklistedReadersTabPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)blacklistedReadersDataGridView).EndInit();
+            myAccountTabPage.ResumeLayout(false);
+            myAccountTabPage.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -224,5 +283,10 @@
         private Button removeFromBlacklistButton;
         private Button addBookButton;
         private Button editBookButton;
+        private TabPage myAccountTabPage;
+        private Label hireDateLabel;
+        private Label phoneNumberLabel;
+        private Label emailLabel;
+        private Label fullNameLabel;
     }
 }

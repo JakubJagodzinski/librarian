@@ -154,7 +154,7 @@ namespace librarian.Forms
                                        .FirstOrDefault(r => r.UserCredentials.ReaderId == _userId);
                 if (reader != null)
                 {
-                    welcomeLabel.Text = $"Welcome, {reader.FullName}";
+                    welcomeLabel.Text = $"Welcome, {reader.FullName}!";
 
                     fullNameLabel.Text = $"Full name: {reader.FullName}";
                     emailLabel.Text = $"Email: {reader.Email}";
