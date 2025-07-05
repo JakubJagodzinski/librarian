@@ -227,6 +227,8 @@ namespace librarian.Forms
 
         private void logoutButton_Click(object sender, EventArgs e)
         {
+            _loginForm.StartPosition = FormStartPosition.Manual;
+            _loginForm.Location = this.Location;
             _loginForm.Show();
             this.Hide();
         }
@@ -262,7 +264,7 @@ namespace librarian.Forms
         {
             if (_selectedReaderId == null)
             {
-                MessageBox.Show("You have to select reader you want to blacklist.");
+                MessageBox.Show(this, "You have to select reader you want to blacklist.");
                 return;
             }
 
@@ -277,7 +279,7 @@ namespace librarian.Forms
         {
             if (_selectedBlacklistEntryId == null)
             {
-                MessageBox.Show("Please select a blacklisted reader entry to remove.");
+                MessageBox.Show(this, "Please select a blacklisted reader entry to remove.");
                 return;
             }
 
@@ -290,13 +292,13 @@ namespace librarian.Forms
                     db.BlacklistedReaders.Remove(entry);
                     db.SaveChanges();
 
-                    MessageBox.Show("Blacklisted reader entry removed.");
+                    MessageBox.Show(this, "Blacklisted reader entry removed.");
 
                     LoadBlacklistedReaders();
                 }
                 else
                 {
-                    MessageBox.Show("Could not find the blacklist entry in the database.");
+                    MessageBox.Show(this, "Could not find the blacklist entry in the database.");
                 }
             }
         }
@@ -314,7 +316,7 @@ namespace librarian.Forms
         {
             if (_selectedBookId == null)
             {
-                MessageBox.Show("Select a book to edit.");
+                MessageBox.Show(this, "Select a book to edit.");
                 return;
             }
 
@@ -348,7 +350,7 @@ namespace librarian.Forms
                             {
                                 employee.Photo = imageBytes;
                                 db.SaveChanges();
-                                MessageBox.Show("Photo updated.");
+                                MessageBox.Show(this, "Photo updated.");
                                 LoadUserData();
 
                                 removePhotoButton.Visible = true;
@@ -356,13 +358,13 @@ namespace librarian.Forms
                             }
                             else
                             {
-                                MessageBox.Show("Employee not found.");
+                                MessageBox.Show(this, "Employee not found.");
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error during uploading photo: " + ex.Message);
+                        MessageBox.Show(this, "Error during uploading photo: " + ex.Message);
                     }
                 }
             }
@@ -370,7 +372,7 @@ namespace librarian.Forms
 
         private void removePhotoButton_Click(object sender, EventArgs e)
         {
-            var confirm = MessageBox.Show("Are you sure?", "Confirmation", MessageBoxButtons.YesNo);
+            var confirm = MessageBox.Show(this, "Are you sure?", "Confirmation", MessageBoxButtons.YesNo);
             if (confirm != DialogResult.Yes)
                 return;
 
@@ -386,14 +388,14 @@ namespace librarian.Forms
                     db.SaveChanges();
 
                     photoBox.Image = null;
-                    MessageBox.Show("Photo has been deleted successfully.");
+                    MessageBox.Show(this, "Photo has been deleted successfully.");
 
                     removePhotoButton.Visible = false;
                     editPhotoButton.Text = "Add photo";
                 }
                 else
                 {
-                    MessageBox.Show("Employee not found.");
+                    MessageBox.Show(this, "Employee not found.");
                 }
             }
         }

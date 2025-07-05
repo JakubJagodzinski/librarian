@@ -51,7 +51,7 @@
             registerButton.Location = new Point(439, 382);
             registerButton.Name = "registerButton";
             registerButton.Size = new Size(75, 23);
-            registerButton.TabIndex = 0;
+            registerButton.TabIndex = 19;
             registerButton.Text = "Register";
             registerButton.UseVisualStyleBackColor = true;
             registerButton.Click += registerButton_Click;
@@ -89,7 +89,7 @@
             emailTextBox.Name = "emailTextBox";
             emailTextBox.PlaceholderText = "john@example.com";
             emailTextBox.Size = new Size(219, 23);
-            emailTextBox.TabIndex = 4;
+            emailTextBox.TabIndex = 12;
             // 
             // roleComboBox
             // 
@@ -97,7 +97,7 @@
             roleComboBox.Location = new Point(295, 337);
             roleComboBox.Name = "roleComboBox";
             roleComboBox.Size = new Size(219, 23);
-            roleComboBox.TabIndex = 7;
+            roleComboBox.TabIndex = 18;
             roleComboBox.SelectedIndexChanged += RoleComboBox_SelectedIndexChanged;
             // 
             // accountType
@@ -118,7 +118,7 @@
             backButton.Location = new Point(295, 382);
             backButton.Name = "backButton";
             backButton.Size = new Size(75, 23);
-            backButton.TabIndex = 9;
+            backButton.TabIndex = 20;
             backButton.Text = "Back";
             backButton.UseVisualStyleBackColor = false;
             backButton.Click += backButton_Click;
@@ -146,7 +146,7 @@
             phoneNumberTextBox.Name = "phoneNumberTextBox";
             phoneNumberTextBox.PlaceholderText = "123 456 789";
             phoneNumberTextBox.Size = new Size(219, 23);
-            phoneNumberTextBox.TabIndex = 12;
+            phoneNumberTextBox.TabIndex = 15;
             // 
             // phoneNumberLabel
             // 
@@ -154,7 +154,7 @@
             phoneNumberLabel.Location = new Point(295, 231);
             phoneNumberLabel.Name = "phoneNumberLabel";
             phoneNumberLabel.Size = new Size(89, 15);
-            phoneNumberLabel.TabIndex = 13;
+            phoneNumberLabel.TabIndex = 99;
             phoneNumberLabel.Text = "Phone number:";
             // 
             // passwordTextBox
@@ -163,7 +163,7 @@
             passwordTextBox.Name = "passwordTextBox";
             passwordTextBox.PlaceholderText = "************";
             passwordTextBox.Size = new Size(219, 23);
-            passwordTextBox.TabIndex = 14;
+            passwordTextBox.TabIndex = 13;
             passwordTextBox.UseSystemPasswordChar = true;
             // 
             // confirmPasswordTextBox
@@ -172,7 +172,7 @@
             confirmPasswordTextBox.Name = "confirmPasswordTextBox";
             confirmPasswordTextBox.PlaceholderText = "************";
             confirmPasswordTextBox.Size = new Size(219, 23);
-            confirmPasswordTextBox.TabIndex = 15;
+            confirmPasswordTextBox.TabIndex = 14;
             confirmPasswordTextBox.UseSystemPasswordChar = true;
             // 
             // datePicker

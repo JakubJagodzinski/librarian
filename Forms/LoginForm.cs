@@ -41,7 +41,7 @@ namespace librarian.Forms
 
             if (user == null || !PasswordHasher.Verify(password, user.PasswordHash))
             {
-                MessageBox.Show("Wrong email or password.");
+                MessageBox.Show(this, "Wrong email or password.");
                 return;
             }
 
@@ -68,10 +68,10 @@ namespace librarian.Forms
             if (_registerForm == null)
             {
                 _registerForm = new RegisterForm(this);
-                _registerForm.StartPosition = FormStartPosition.Manual;
-                _registerForm.Location = this.Location;
             }
 
+            _registerForm.StartPosition = FormStartPosition.Manual;
+            _registerForm.Location = this.Location;
             _registerForm.Show();
             this.Hide();
         }

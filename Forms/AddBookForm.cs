@@ -54,11 +54,13 @@ namespace librarian.Forms
             else if (e.NewValue == CheckState.Unchecked)
                 count--;
 
-            genresLabel.Text = $"Genres: ({count})";
+            genresLabel.Text = $"Genres ({count}):";
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
+            _employeeMainForm.StartPosition = FormStartPosition.Manual;
+            _employeeMainForm.Location = this.Location;
             _employeeMainForm.Show();
             this.Hide();
         }
@@ -71,13 +73,13 @@ namespace librarian.Forms
 
             if (string.IsNullOrWhiteSpace(title))
             {
-                MessageBox.Show("Please enter the book title.", "Missing Title", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, "Please enter the book title.", "Missing Title", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(authorName))
             {
-                MessageBox.Show("Please enter or select an author.", "Missing Author", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, "Please enter or select an author.", "Missing Author", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -109,8 +111,10 @@ namespace librarian.Forms
                 db.SaveChanges();
             }
 
-            MessageBox.Show("Book added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(this, "Book added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+            _employeeMainForm.StartPosition = FormStartPosition.Manual;
+            _employeeMainForm.Location = this.Location;
             _employeeMainForm.Show();
             this.Hide();
         }

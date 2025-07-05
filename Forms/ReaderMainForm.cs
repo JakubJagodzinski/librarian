@@ -249,6 +249,8 @@ namespace librarian.Forms
 
         private void logoutButton_Click(object sender, EventArgs e)
         {
+            _loginForm.StartPosition = FormStartPosition.Manual;
+            _loginForm.Location = this.Location;
             _loginForm.Show();
             this.Hide();
         }
@@ -275,11 +277,11 @@ namespace librarian.Forms
         {
             if (_selectedRentalId == null)
             {
-                MessageBox.Show("Please select a rental to end.");
+                MessageBox.Show(this, "Please select a rental to end.");
                 return;
             }
 
-            var confirmResult = MessageBox.Show("Are you sure you want to end this rental?", "Confirm End Rental", MessageBoxButtons.YesNo);
+            var confirmResult = MessageBox.Show(this, "Are you sure you want to end this rental?", "Confirm End Rental", MessageBoxButtons.YesNo);
             if (confirmResult == DialogResult.No)
             {
                 return;
@@ -293,13 +295,13 @@ namespace librarian.Forms
 
                 if (rental == null)
                 {
-                    MessageBox.Show("Rental not found.");
+                    MessageBox.Show(this, "Rental not found.");
                     return;
                 }
 
                 if (rental.ReturnDate != null)
                 {
-                    MessageBox.Show("This rental is already ended.");
+                    MessageBox.Show(this, "This rental is already ended.");
                     return;
                 }
 
@@ -321,12 +323,12 @@ namespace librarian.Forms
                         conn.Close();
                     }
 
-                    MessageBox.Show("Rental successfully ended.");
+                    MessageBox.Show(this, "Rental successfully ended.");
                     LoadMyRentals();
                 }
                 catch (SqlException ex)
                 {
-                    MessageBox.Show("Error while ending rental: " + ex.Message);
+                    MessageBox.Show(this, "Error while ending rental: " + ex.Message);
                 }
             }
         }
@@ -343,17 +345,21 @@ namespace librarian.Forms
         {
             if (IsOnBlackList())
             {
-                MessageBox.Show("You are on blacklist and cannot rent a book.");
+                MessageBox.Show(this, "You are on blacklist and cannot rent a book.");
                 return;
             }
 
             if (_selectedBookId == null)
             {
-                MessageBox.Show("Please select a book to rent.");
+                MessageBox.Show(this, "Please select a book to rent.");
                 return;
             }
 
             var popup = new PlannedReturnDateForm();
+            popup.StartPosition = FormStartPosition.Manual;
+            int x = this.Location.X + (this.Width - popup.Width) / 2;
+            int y = this.Location.Y + (this.Height - popup.Height) / 2;
+            popup.Location = new Point(x, y);
             if (popup.ShowDialog() != DialogResult.OK)
                 return;
 
@@ -361,7 +367,7 @@ namespace librarian.Forms
 
             if (plannedReturnDate <= DateTime.Today)
             {
-                MessageBox.Show("Planned return date must be in the future.");
+                MessageBox.Show(this, "Planned return date must be in the future.");
                 return;
             }
 
@@ -370,7 +376,7 @@ namespace librarian.Forms
                 var book = context.Books.FirstOrDefault(b => b.BookId == _selectedBookId);
                 if (book == null)
                 {
-                    MessageBox.Show("Book not found in the database.");
+                    MessageBox.Show(this, "Book not found in the database.");
                     return;
                 }
 
@@ -394,12 +400,12 @@ namespace librarian.Forms
                         conn.Close();
                     }
 
-                    MessageBox.Show($"Book \"{book.Title}\" has been rented until {plannedReturnDate.Value.ToShortDateString()}.");
-                    LoadBooks(); // Refresh book list
+                    MessageBox.Show(this, $"Book \"{book.Title}\" has been rented until {plannedReturnDate.Value.ToShortDateString()}.");
+                    LoadBooks();
                 }
                 catch (SqlException ex)
                 {
-                    MessageBox.Show($"Failed to rent book: {ex.Message}");
+                    MessageBox.Show(this, $"Failed to rent book: {ex.Message}");
                 }
             }
         }
@@ -411,7 +417,7 @@ namespace librarian.Forms
 
             if (startDate > endDate)
             {
-                MessageBox.Show("Start date must be before end date.");
+                MessageBox.Show(this, "Start date must be before end date.");
                 return;
             }
 
@@ -425,7 +431,7 @@ namespace librarian.Forms
 
                 if (rentals.Count == 0)
                 {
-                    MessageBox.Show("No rentals found in the selected date range.");
+                    MessageBox.Show(this, "No rentals found in the selected date range.");
                     formsPlot.Plot.Clear();
                     formsPlot.Refresh();
                     totalRentalsLabel.Text = "Total Rentals: 0";
@@ -481,7 +487,7 @@ namespace librarian.Forms
                             {
                                 reader.Photo = imageBytes;
                                 db.SaveChanges();
-                                MessageBox.Show("Photo updated.");
+                                MessageBox.Show(this, "Photo updated.");
                                 LoadUserData();
 
                                 removePhotoButton.Visible = true;
@@ -489,13 +495,13 @@ namespace librarian.Forms
                             }
                             else
                             {
-                                MessageBox.Show("Reader not found.");
+                                MessageBox.Show(this, "Reader not found.");
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error during uploading photo: " + ex.Message);
+                        MessageBox.Show(this, "Error during uploading photo: " + ex.Message);
                     }
                 }
             }
@@ -503,7 +509,7 @@ namespace librarian.Forms
 
         private void removePhotoButton_Click(object sender, EventArgs e)
         {
-            var confirm = MessageBox.Show("Are you sure?", "Confirmation", MessageBoxButtons.YesNo);
+            var confirm = MessageBox.Show(this, "Are you sure?", "Confirmation", MessageBoxButtons.YesNo);
             if (confirm != DialogResult.Yes)
                 return;
 
@@ -519,14 +525,14 @@ namespace librarian.Forms
                     db.SaveChanges();
 
                     photoBox.Image = null;
-                    MessageBox.Show("Photo has been deleted successfully.");
+                    MessageBox.Show(this, "Photo has been deleted successfully.");
 
                     removePhotoButton.Visible = false;
                     editPhotoButton.Text = "Add photo";
                 }
                 else
                 {
-                    MessageBox.Show("Reader not found.");
+                    MessageBox.Show(this, "Reader not found.");
                 }
             }
         }

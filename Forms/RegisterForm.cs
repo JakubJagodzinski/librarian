@@ -77,14 +77,14 @@ namespace librarian.Forms
                 string.IsNullOrWhiteSpace(phoneNumber)
                 )
             {
-                MessageBox.Show("All fields are required.");
+                MessageBox.Show(this, "All fields are required.");
                 return;
             }
 
             string phonePattern = @"^\+?[0-9\s\-\(\)]{7,15}$";
             if (!Regex.IsMatch(phoneNumber, phonePattern))
             {
-                MessageBox.Show("Invalid phone number format.");
+                MessageBox.Show(this, "Invalid phone number format.");
                 return;
             }
 
@@ -92,14 +92,14 @@ namespace librarian.Forms
             {
                 if (date > DateTime.Now)
                 {
-                    MessageBox.Show("Birthdate cannot be future date.");
+                    MessageBox.Show(this, "Birthdate cannot be future date.");
                     return;
                 }
             }
 
             if (password != confirm)
             {
-                MessageBox.Show("Passwords don't match.");
+                MessageBox.Show(this, "Passwords don't match.");
                 return;
             }
 
@@ -107,7 +107,7 @@ namespace librarian.Forms
 
             if (db.UserCredentials.Any(u => u.Email == email))
             {
-                MessageBox.Show("Email already taken.");
+                MessageBox.Show(this, "Email already taken.");
                 return;
             }
 
@@ -148,14 +148,18 @@ namespace librarian.Forms
             db.UserCredentials.Add(credential);
             db.SaveChanges();
 
-            MessageBox.Show("Registered successfully.");
+            MessageBox.Show(this, "Registered successfully.");
 
+            _loginForm.StartPosition = FormStartPosition.Manual;
+            _loginForm.Location = this.Location;
             _loginForm.Show();
             this.Hide();
         }
 
         private void backButton_Click(object sender, EventArgs e)
         {
+            _loginForm.StartPosition = FormStartPosition.Manual;
+            _loginForm.Location = this.Location;
             _loginForm.Show();
             this.Hide();
         }

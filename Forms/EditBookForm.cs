@@ -61,7 +61,7 @@ namespace librarian.Forms
 
             if (book == null)
             {
-                MessageBox.Show("Book not found.");
+                MessageBox.Show(this, "Book not found.");
                 Close();
                 return;
             }
@@ -110,6 +110,8 @@ namespace librarian.Forms
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
+            _employeeMainForm.StartPosition = FormStartPosition.Manual;
+            _employeeMainForm.Location = this.Location;
             _employeeMainForm.Show();
             this.Hide();
         }
@@ -118,7 +120,7 @@ namespace librarian.Forms
         {
             if (string.IsNullOrWhiteSpace(titleTextBox.Text) || string.IsNullOrWhiteSpace(authorComboBox.Text))
             {
-                MessageBox.Show("Please fill in both the title and author.");
+                MessageBox.Show(this, "Please fill in both the title and author.");
                 return;
             }
 
@@ -129,7 +131,7 @@ namespace librarian.Forms
 
             if (book == null)
             {
-                MessageBox.Show("Book not found.");
+                MessageBox.Show(this, "Book not found.");
                 return;
             }
 
@@ -162,8 +164,10 @@ namespace librarian.Forms
 
             db.SaveChanges();
 
-            MessageBox.Show("Book updated successfully.");
+            MessageBox.Show(this, "Book updated successfully.");
 
+            _employeeMainForm.StartPosition = FormStartPosition.Manual;
+            _employeeMainForm.Location = this.Location;
             _employeeMainForm.Show();
             this.Hide();
         }

@@ -32,8 +32,6 @@
             reasonTextBox = new TextBox();
             endDateLabel = new Label();
             endDatePicker = new DateTimePicker();
-            periodComboBox = new ComboBox();
-            periodLabel = new Label();
             blacklistReaderButton = new Button();
             readerNameLabel = new Label();
             cancelButton = new Button();
@@ -72,23 +70,6 @@
             endDatePicker.Size = new Size(234, 23);
             endDatePicker.TabIndex = 3;
             // 
-            // periodComboBox
-            // 
-            periodComboBox.FormattingEnabled = true;
-            periodComboBox.Location = new Point(537, 232);
-            periodComboBox.Name = "periodComboBox";
-            periodComboBox.Size = new Size(121, 23);
-            periodComboBox.TabIndex = 4;
-            // 
-            // periodLabel
-            // 
-            periodLabel.AutoSize = true;
-            periodLabel.Location = new Point(537, 214);
-            periodLabel.Name = "periodLabel";
-            periodLabel.Size = new Size(44, 15);
-            periodLabel.TabIndex = 5;
-            periodLabel.Text = "Period:";
-            // 
             // blacklistReaderButton
             // 
             blacklistReaderButton.Location = new Point(399, 354);
@@ -126,8 +107,6 @@
             Controls.Add(cancelButton);
             Controls.Add(readerNameLabel);
             Controls.Add(blacklistReaderButton);
-            Controls.Add(periodLabel);
-            Controls.Add(periodComboBox);
             Controls.Add(endDatePicker);
             Controls.Add(endDateLabel);
             Controls.Add(reasonTextBox);
@@ -144,8 +123,6 @@
         private TextBox reasonTextBox;
         private Label endDateLabel;
         private DateTimePicker endDatePicker;
-        private ComboBox periodComboBox;
-        private Label periodLabel;
         private Button blacklistReaderButton;
         private Label readerNameLabel;
         private Button cancelButton;

@@ -37,7 +37,7 @@ namespace librarian.Forms
 
             if (string.IsNullOrWhiteSpace(reason))
             {
-                MessageBox.Show("Reason cannot be empty!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, "Reason cannot be empty!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -47,7 +47,7 @@ namespace librarian.Forms
 
                 if (removalDate <= DateTime.Now)
                 {
-                    MessageBox.Show("End date must be future date!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(this, "End date must be future date!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -62,9 +62,11 @@ namespace librarian.Forms
                 db.BlacklistedReaders.Add(blacklistEntry);
                 db.SaveChanges();
 
-                MessageBox.Show("Reader blacklisted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, "Reader blacklisted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
+            _employeeMainForm.StartPosition = FormStartPosition.Manual;
+            _employeeMainForm.Location = this.Location;
             _employeeMainForm.Show();
             this.Hide();
 
@@ -72,6 +74,8 @@ namespace librarian.Forms
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
+            _employeeMainForm.StartPosition = FormStartPosition.Manual;
+            _employeeMainForm.Location = this.Location;
             _employeeMainForm.Show();
             this.Hide();
         }
