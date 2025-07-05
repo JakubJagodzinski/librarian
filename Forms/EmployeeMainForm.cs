@@ -1,5 +1,4 @@
-﻿using System.Windows.Forms;
-using librarian.Data;
+﻿using librarian.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace librarian.Forms
@@ -9,26 +8,46 @@ namespace librarian.Forms
 
         private readonly int _userId;
 
-        private int? selectedReaderId = null;
+        private int? _selectedReaderId = null;
 
-        private int? selectedBlacklistEntryId = null;
+        private int? _selectedBlacklistEntryId = null;
 
-        public EmployeeMainForm(int userId)
+        private BaseForm _loginForm;
+
+        private BaseForm _addBookForm;
+
+        public EmployeeMainForm(int userId, BaseForm loginForm)
         {
             InitializeComponent();
+
+            this.Text = "Librarian";
+
             _userId = userId;
 
+            LoadAllRequiredData();
+
+            AddVisibleChanged();
+
+            _loginForm = loginForm;
+        }
+
+        private void AddVisibleChanged()
+        {
+            this.VisibleChanged += (s, e) =>
+            {
+                if (this.Visible)
+                {
+                    LoadAllRequiredData();
+                }
+            };
+        }
+
+        private void LoadAllRequiredData()
+        {
             LoadUserData();
             LoadBooks();
             LoadReaders();
             LoadBlacklistedReaders();
-
-            this.Text = "Librarian";
-        }
-
-        private void EmployeeMainForm_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -124,10 +143,7 @@ namespace librarian.Forms
 
         private void logoutButton_Click(object sender, EventArgs e)
         {
-            var loginForm = new LoginForm();
-            loginForm.StartPosition = FormStartPosition.Manual;
-            loginForm.Location = this.Location;
-            loginForm.Show();
+            _loginForm.Show();
             this.Hide();
         }
 
@@ -136,7 +152,7 @@ namespace librarian.Forms
             if (e.RowIndex >= 0)
             {
                 var row = readersDataGridView.Rows[e.RowIndex];
-                selectedReaderId = Convert.ToInt32(row.Cells["ReaderId"].Value);
+                _selectedReaderId = Convert.ToInt32(row.Cells["ReaderId"].Value);
 
                 //MessageBox.Show($"Selected ReaderId: {selectedReaderId}");
             }
@@ -147,7 +163,7 @@ namespace librarian.Forms
             if (e.RowIndex >= 0)
             {
                 var row = blacklistedReadersDataGridView.Rows[e.RowIndex];
-                selectedBlacklistEntryId = Convert.ToInt32(row.Cells["BlacklistedReaderId"].Value);
+                _selectedBlacklistEntryId = Convert.ToInt32(row.Cells["BlacklistedReaderId"].Value);
 
                 //MessageBox.Show($"Selected BlacklistEntryId: {selectedBlacklistEntryId}");
             }
@@ -155,13 +171,13 @@ namespace librarian.Forms
 
         private void blacklistReaderButton_Click(object sender, EventArgs e)
         {
-            if (selectedReaderId == null)
+            if (_selectedReaderId == null)
             {
                 MessageBox.Show("You have to select reader you want to blacklist.");
                 return;
             }
 
-            var blacklistReaderForm = new BlacklistReaderForm(selectedReaderId.Value, this);
+            var blacklistReaderForm = new BlacklistReaderForm(_selectedReaderId.Value, this);
             blacklistReaderForm.StartPosition = FormStartPosition.Manual;
             blacklistReaderForm.Location = this.Location;
 
@@ -171,18 +187,15 @@ namespace librarian.Forms
 
         private void removeFromBlacklistButton_Click(object sender, EventArgs e)
         {
-            if (blacklistedReadersDataGridView.SelectedRows.Count == 0)
+            if (_selectedBlacklistEntryId == null)
             {
                 MessageBox.Show("Please select a blacklisted reader entry to remove.");
                 return;
             }
 
-            var selectedRow = blacklistedReadersDataGridView.SelectedRows[0];
-            var blacklistEntryId = Convert.ToInt32(selectedRow.Cells["BlacklistedReaderId"].Value);
-
             using (var db = new LibraryDbContext())
             {
-                var entry = db.BlacklistedReaders.FirstOrDefault(b => b.BlacklistedReaderId == blacklistEntryId);
+                var entry = db.BlacklistedReaders.FirstOrDefault(b => b.BlacklistedReaderId == _selectedBlacklistEntryId);
 
                 if (entry != null)
                 {
@@ -197,6 +210,19 @@ namespace librarian.Forms
                     MessageBox.Show("Could not find the blacklist entry in the database.");
                 }
             }
+        }
+
+        private void addBookButton_Click(object sender, EventArgs e)
+        {
+            if (_addBookForm == null)
+            {
+                _addBookForm = new AddBookForm(this);
+                _addBookForm.StartPosition = FormStartPosition.Manual;
+                _addBookForm.Location = this.Location;
+            }
+
+            _addBookForm.Show();
+            this.Hide();
         }
     }
 }

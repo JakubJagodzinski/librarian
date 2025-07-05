@@ -5,11 +5,27 @@ namespace librarian.Forms
 {
     public partial class LoginForm : BaseForm
     {
+        private BaseForm _registerForm;
+
         public LoginForm()
         {
             InitializeComponent();
 
             this.Text = "Librarian";
+
+            AddVisibleChanged();
+        }
+
+        private void AddVisibleChanged()
+        {
+            this.VisibleChanged += (s, e) =>
+            {
+                if (this.Visible)
+                {
+                    emailTextBox.Text = null;
+                    passwordTextBox.Text = null;
+                }
+            };
         }
 
         private void loginButton_Click(object sender, EventArgs e)
@@ -31,7 +47,7 @@ namespace librarian.Forms
 
             if (user.Reader != null)
             {
-                var readerMainForm = new ReaderMainForm(user.Reader.ReaderId);
+                var readerMainForm = new ReaderMainForm(user.Reader.ReaderId, this);
                 readerMainForm.StartPosition = FormStartPosition.Manual;
                 readerMainForm.Location = this.Location;
                 readerMainForm.Show();
@@ -39,7 +55,7 @@ namespace librarian.Forms
             }
             else if (user.Employee != null)
             {
-                var employeeMainForm = new EmployeeMainForm(user.Employee.EmployeeId);
+                var employeeMainForm = new EmployeeMainForm(user.Employee.EmployeeId, this);
                 employeeMainForm.StartPosition = FormStartPosition.Manual;
                 employeeMainForm.Location = this.Location;
                 employeeMainForm.Show();
@@ -49,10 +65,14 @@ namespace librarian.Forms
 
         private void registerButton_Click(object sender, EventArgs e)
         {
-            var registerForm = new RegisterForm();
-            registerForm.StartPosition = FormStartPosition.Manual;
-            registerForm.Location = this.Location;
-            registerForm.Show();
+            if (_registerForm == null)
+            {
+                _registerForm = new RegisterForm(this);
+                _registerForm.StartPosition = FormStartPosition.Manual;
+                _registerForm.Location = this.Location;
+            }
+
+            _registerForm.Show();
             this.Hide();
         }
     }

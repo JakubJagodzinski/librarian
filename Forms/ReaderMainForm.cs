@@ -1,5 +1,4 @@
-﻿using System;
-using librarian.Data;
+﻿using librarian.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace librarian.Forms
@@ -8,16 +7,20 @@ namespace librarian.Forms
     {
         private readonly int _userId;
 
-        public ReaderMainForm(int userId)
+        private BaseForm _loginForm;
+
+        public ReaderMainForm(int userId, BaseForm loginForm)
         {
             InitializeComponent();
+
+            this.Text = "Librarian";
+
             _userId = userId;
+            _loginForm = loginForm;
 
             LoadUserData();
             LoadBooks();
             LoadRentals();
-
-            this.Text = "Librarian";
         }
 
         private void LoadBooks()
@@ -77,10 +80,7 @@ namespace librarian.Forms
 
         private void logoutButton_Click(object sender, EventArgs e)
         {
-            var loginForm = new LoginForm();
-            loginForm.StartPosition = FormStartPosition.Manual;
-            loginForm.Location = this.Location;
-            loginForm.Show();
+            _loginForm.Show();
             this.Hide();
         }
 

@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace librarian.Forms
+﻿namespace librarian.Forms
 {
     public class BaseForm : Form
     {
         public BaseForm()
         {
-            this.FormClosed += (s, e) => Application.Exit();
+            this.FormClosing += BaseForm_FormClosing;
+        }
 
-            this.Icon = new Icon("Assets/librarian.ico");
+        private void BaseForm_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                Application.Exit();
+            }
         }
     }
 }

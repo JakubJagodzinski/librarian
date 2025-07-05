@@ -5,24 +5,60 @@ namespace librarian.Forms
 {
     public partial class RegisterForm : BaseForm
     {
-        public RegisterForm()
+        private BaseForm _loginForm;
+
+        public RegisterForm(BaseForm loginForm)
         {
             InitializeComponent();
 
+            this.Text = "Librarian";
+
+            _loginForm = loginForm;
+
+            AddRolesToComboBox();
+
+            AddVisibleChanged();
+        }
+
+        private void AddVisibleChanged()
+        {
+            this.VisibleChanged += (s, e) =>
+            {
+                if (this.Visible)
+                {
+                    fullNameTextBox.Text = null;
+                    emailTextBox.Text = null;
+                    passwordTextBox.Text = null;
+                    confirmPasswordTextBox.Text = null;
+                    phoneNumberTextBox.Text = null;
+                    var role = roleComboBox.SelectedIndex = 0;
+                }
+            };
+        }
+
+        private void AddRolesToComboBox()
+        {
             roleComboBox.Items.Add("Reader");
             roleComboBox.Items.Add("Employee");
             roleComboBox.SelectedIndex = 0;
-
-            this.Text = "Librarian";
         }
+
         private void registerButton_Click(object sender, EventArgs e)
         {
+            var fullName = fullNameTextBox.Text.Trim();
             var email = emailTextBox.Text.Trim();
             var password = passwordTextBox.Text;
             var confirm = confirmPasswordTextBox.Text;
             var role = roleComboBox.SelectedItem?.ToString();
+            var phoneNumber = phoneNumberTextBox.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(role))
+            if (
+                string.IsNullOrEmpty(fullName) ||
+                string.IsNullOrWhiteSpace(email) ||
+                string.IsNullOrWhiteSpace(password) ||
+                string.IsNullOrWhiteSpace(role) ||
+                string.IsNullOrWhiteSpace(phoneNumber)
+                )
             {
                 MessageBox.Show("All fields are required.");
                 return;
@@ -53,9 +89,9 @@ namespace librarian.Forms
             {
                 var reader = new Reader
                 {
-                    FullName = fullNameTextBox.Text,
-                    Email = emailTextBox.Text,
-                    PhoneNumber = phoneNumberTextBox.Text
+                    FullName = fullName,
+                    Email = email,
+                    PhoneNumber = phoneNumber
                 };
                 db.Readers.Add(reader);
                 db.SaveChanges();
@@ -63,15 +99,11 @@ namespace librarian.Forms
             }
             else if (role == "Employee")
             {
-                var emp = new Employee {
-                    FullName= fullNameTextBox.Text,
-                    Email = emailTextBox.Text,
-                    PhoneNumber = phoneNumberTextBox.Text
-                };
-                var reader = new Employee
+                var emp = new Employee
                 {
-                    FullName = fullNameTextBox.Text,
-                    Email = emailTextBox.Text
+                    FullName = fullName,
+                    Email = email,
+                    PhoneNumber = phoneNumber
                 };
                 db.Employees.Add(emp);
                 db.SaveChanges();
@@ -83,19 +115,13 @@ namespace librarian.Forms
 
             MessageBox.Show("Registered successfully.");
 
-            var loginForm = new LoginForm();
-            loginForm.StartPosition = FormStartPosition.Manual;
-            loginForm.Location = this.Location;
-            loginForm.Show();
-            this.Close();
+            _loginForm.Show();
+            this.Hide();
         }
 
         private void backButton_Click(object sender, EventArgs e)
         {
-            var loginForm = new LoginForm();
-            loginForm.StartPosition = FormStartPosition.Manual;
-            loginForm.Location = this.Location;
-            loginForm.Show();
+            _loginForm.Show();
             this.Hide();
         }
     }
