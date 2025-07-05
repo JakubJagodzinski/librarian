@@ -9,5 +9,6 @@
         public DateTime HireDate { get; set; }
         public DateTime? TerminationDate { get; set; }
         public UserCredentials UserCredentials { get; set; }
+        public byte[]? Photo { get; set; }
     }
 }

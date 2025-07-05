@@ -1,5 +1,6 @@
 ﻿using librarian.Data;
 using librarian.Dto;
+using librarian.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace librarian.Forms
@@ -152,16 +153,34 @@ namespace librarian.Forms
         {
             using (var db = new LibraryDbContext())
             {
-                var reader = db.Employees.Include(r => r.UserCredentials)
+                var employee = db.Employees.Include(r => r.UserCredentials)
                                        .FirstOrDefault(r => r.UserCredentials.EmployeeId == _userId);
-                if (reader != null)
+                if (employee != null)
                 {
-                    welcomeLabel.Text = $"Welcome, {reader.FullName}!";
+                    welcomeLabel.Text = $"Welcome, {employee.FullName}!";
 
-                    fullNameLabel.Text = $"Full name: {reader.FullName}";
-                    emailLabel.Text = $"Email: {reader.Email}";
-                    phoneNumberLabel.Text = $"Phone number: {reader.PhoneNumber}";
-                    hireDateLabel.Text = $"Hire date: {reader.HireDate.ToShortDateString()}";
+                    fullNameLabel.Text = $"Full name: {employee.FullName}";
+                    emailLabel.Text = $"Email: {employee.Email}";
+                    phoneNumberLabel.Text = $"Phone number: {employee.PhoneNumber}";
+                    hireDateLabel.Text = $"Hire date: {employee.HireDate.ToShortDateString()}";
+
+                    if (employee.Photo != null)
+                    {
+                        using (var ms = new MemoryStream(employee.Photo))
+                        {
+                            photoBox.Image = System.Drawing.Image.FromStream(ms);
+                        }
+
+                        editPhotoButton.Text = "Edit photo";
+                        removePhotoButton.Visible = true;
+                    }
+                    else
+                    {
+                        photoBox.Image = null;
+
+                        editPhotoButton.Text = "Add photo";
+                        removePhotoButton.Visible = false;
+                    }
                 }
             }
         }
@@ -270,6 +289,79 @@ namespace librarian.Forms
             editBookForm.Location = this.Location;
             editBookForm.Show();
             this.Hide();
+        }
+
+        private void editPhotoButton_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Title = "Choose a photo";
+                openFileDialog.Filter = "Graphic files(*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = openFileDialog.FileName;
+
+                    try
+                    {
+                        byte[] imageBytes = File.ReadAllBytes(filePath);
+
+                        using (var db = new LibraryDbContext())
+                        {
+                            var employee = db.Employees.FirstOrDefault(e => e.EmployeeId == _userId);
+
+                            if (employee != null)
+                            {
+                                employee.Photo = imageBytes;
+                                db.SaveChanges();
+                                MessageBox.Show("Photo updated.");
+                                LoadUserData();
+
+                                removePhotoButton.Visible = true;
+                                editPhotoButton.Text = "Edit photo";
+                            }
+                            else
+                            {
+                                MessageBox.Show("Employee not found.");
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error during uploading photo: " + ex.Message);
+                    }
+                }
+            }
+        }
+
+        private void removePhotoButton_Click(object sender, EventArgs e)
+        {
+            var confirm = MessageBox.Show("Are you sure?", "Confirmation", MessageBoxButtons.YesNo);
+            if (confirm != DialogResult.Yes)
+                return;
+
+            using (var db = new LibraryDbContext())
+            {
+                var employee = db.Employees
+                                 .Include(e => e.UserCredentials)
+                                 .FirstOrDefault(e => e.UserCredentials.EmployeeId == _userId);
+
+                if (employee != null)
+                {
+                    employee.Photo = null;
+                    db.SaveChanges();
+
+                    photoBox.Image = null;
+                    MessageBox.Show("Photo has been deleted successfully.");
+
+                    removePhotoButton.Visible = false;
+                    editPhotoButton.Text = "Add photo";
+                }
+                else
+                {
+                    MessageBox.Show("Employee not found.");
+                }
+            }
         }
     }
 }

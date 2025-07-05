@@ -186,6 +186,24 @@ namespace librarian.Forms
                     emailLabel.Text = $"Email: {reader.Email}";
                     phoneNumberLabel.Text = $"Phone number: {reader.PhoneNumber}";
                     birthdateLabel.Text = $"Birthdate: {reader.DateOfBirth.ToShortDateString()}";
+
+                    if (reader.Photo != null)
+                    {
+                        using (var ms = new MemoryStream(reader.Photo))
+                        {
+                            photoBox.Image = System.Drawing.Image.FromStream(ms);
+                        }
+
+                        editPhotoButton.Text = "Edit photo";
+                        removePhotoButton.Visible = true;
+                    }
+                    else
+                    {
+                        photoBox.Image = null;
+
+                        editPhotoButton.Text = "Add photo";
+                        removePhotoButton.Visible = false;
+                    }
                 }
             }
         }
@@ -382,6 +400,77 @@ namespace librarian.Forms
             }
         }
 
+        private void editPhotoButton_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Title = "Choose a photo";
+                openFileDialog.Filter = "Graphic files(*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png";
 
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = openFileDialog.FileName;
+
+                    try
+                    {
+                        byte[] imageBytes = File.ReadAllBytes(filePath);
+
+                        using (var db = new LibraryDbContext())
+                        {
+                            var reader = db.Readers.FirstOrDefault(e => e.ReaderId == _userId);
+
+                            if (reader != null)
+                            {
+                                reader.Photo = imageBytes;
+                                db.SaveChanges();
+                                MessageBox.Show("Photo updated.");
+                                LoadUserData();
+
+                                removePhotoButton.Visible = true;
+                                editPhotoButton.Text = "Edit photo";
+                            }
+                            else
+                            {
+                                MessageBox.Show("Reader not found.");
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error during uploading photo: " + ex.Message);
+                    }
+                }
+            }
+        }
+
+        private void removePhotoButton_Click(object sender, EventArgs e)
+        {
+            var confirm = MessageBox.Show("Are you sure?", "Confirmation", MessageBoxButtons.YesNo);
+            if (confirm != DialogResult.Yes)
+                return;
+
+            using (var db = new LibraryDbContext())
+            {
+                var reader = db.Readers
+                                 .Include(e => e.UserCredentials)
+                                 .FirstOrDefault(e => e.UserCredentials.ReaderId == _userId);
+
+                if (reader != null)
+                {
+                    reader.Photo = null;
+                    db.SaveChanges();
+
+                    photoBox.Image = null;
+                    MessageBox.Show("Photo has been deleted successfully.");
+
+                    removePhotoButton.Visible = false;
+                    editPhotoButton.Text = "Add photo";
+                }
+                else
+                {
+                    MessageBox.Show("Reader not found.");
+                }
+            }
+        }
     }
 }

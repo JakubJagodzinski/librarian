@@ -48,6 +48,9 @@
             totalRentalsLabel = new Label();
             formsPlot = new ScottPlot.WinForms.FormsPlot();
             myAccountTabPage = new TabPage();
+            removePhotoButton = new Button();
+            editPhotoButton = new Button();
+            photoBox = new PictureBox();
             fullNameLabel = new Label();
             birthdateLabel = new Label();
             phoneNumberLabel = new Label();
@@ -61,6 +64,7 @@
             ((System.ComponentModel.ISupportInitialize)rentalsHistoryDataGridView).BeginInit();
             statisticsTabPage.SuspendLayout();
             myAccountTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)photoBox).BeginInit();
             SuspendLayout();
             // 
             // welcomeLabel
@@ -264,6 +268,9 @@
             // 
             // myAccountTabPage
             // 
+            myAccountTabPage.Controls.Add(removePhotoButton);
+            myAccountTabPage.Controls.Add(editPhotoButton);
+            myAccountTabPage.Controls.Add(photoBox);
             myAccountTabPage.Controls.Add(fullNameLabel);
             myAccountTabPage.Controls.Add(birthdateLabel);
             myAccountTabPage.Controls.Add(phoneNumberLabel);
@@ -276,10 +283,40 @@
             myAccountTabPage.Text = "My Account";
             myAccountTabPage.UseVisualStyleBackColor = true;
             // 
+            // removePhotoButton
+            // 
+            removePhotoButton.Location = new Point(74, 302);
+            removePhotoButton.Name = "removePhotoButton";
+            removePhotoButton.Size = new Size(110, 23);
+            removePhotoButton.TabIndex = 6;
+            removePhotoButton.Text = "Remove photo";
+            removePhotoButton.UseVisualStyleBackColor = true;
+            removePhotoButton.Click += removePhotoButton_Click;
+            // 
+            // editPhotoButton
+            // 
+            editPhotoButton.Location = new Point(74, 273);
+            editPhotoButton.Name = "editPhotoButton";
+            editPhotoButton.Size = new Size(110, 23);
+            editPhotoButton.TabIndex = 5;
+            editPhotoButton.Text = "Edit photo";
+            editPhotoButton.UseVisualStyleBackColor = true;
+            editPhotoButton.Click += editPhotoButton_Click;
+            // 
+            // photoBox
+            // 
+            photoBox.BorderStyle = BorderStyle.FixedSingle;
+            photoBox.Location = new Point(44, 61);
+            photoBox.Name = "photoBox";
+            photoBox.Size = new Size(169, 195);
+            photoBox.SizeMode = PictureBoxSizeMode.Zoom;
+            photoBox.TabIndex = 4;
+            photoBox.TabStop = false;
+            // 
             // fullNameLabel
             // 
             fullNameLabel.AutoSize = true;
-            fullNameLabel.Location = new Point(21, 31);
+            fullNameLabel.Location = new Point(258, 63);
             fullNameLabel.Name = "fullNameLabel";
             fullNameLabel.Size = new Size(70, 15);
             fullNameLabel.TabIndex = 3;
@@ -288,7 +325,7 @@
             // birthdateLabel
             // 
             birthdateLabel.AutoSize = true;
-            birthdateLabel.Location = new Point(21, 204);
+            birthdateLabel.Location = new Point(258, 201);
             birthdateLabel.Name = "birthdateLabel";
             birthdateLabel.Size = new Size(66, 15);
             birthdateLabel.TabIndex = 2;
@@ -297,7 +334,7 @@
             // phoneNumberLabel
             // 
             phoneNumberLabel.AutoSize = true;
-            phoneNumberLabel.Location = new Point(21, 146);
+            phoneNumberLabel.Location = new Point(258, 148);
             phoneNumberLabel.Name = "phoneNumberLabel";
             phoneNumberLabel.Size = new Size(97, 15);
             phoneNumberLabel.TabIndex = 1;
@@ -306,7 +343,7 @@
             // emailLabel
             // 
             emailLabel.AutoSize = true;
-            emailLabel.Location = new Point(21, 85);
+            emailLabel.Location = new Point(258, 104);
             emailLabel.Name = "emailLabel";
             emailLabel.Size = new Size(47, 15);
             emailLabel.TabIndex = 0;
@@ -333,6 +370,7 @@
             statisticsTabPage.PerformLayout();
             myAccountTabPage.ResumeLayout(false);
             myAccountTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)photoBox).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -363,5 +401,8 @@
         private Label fullNameLabel;
         private Label birthdateLabel;
         private Label phoneNumberLabel;
+        private Button editPhotoButton;
+        private PictureBox photoBox;
+        private Button removePhotoButton;
     }
 }

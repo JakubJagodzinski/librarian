@@ -14,5 +14,6 @@ namespace librarian.Models
         public ICollection<Rental> Rentals { get; set; } = new List<Rental>();
         public UserCredentials UserCredentials { get; set; }
         public ICollection<BlacklistedReader> BlacklistedEntries { get; set; } = new List<BlacklistedReader>();
+        public byte[]? Photo { get; set; }
     }
 }
