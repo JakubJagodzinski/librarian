@@ -31,17 +31,21 @@
             welcomeLabel = new Label();
             logoutButton = new Button();
             mainTabControl = new TabControl();
-            booksTab = new TabPage();
+            booksTabPage = new TabPage();
             booksDataGridView = new DataGridView();
-            rentalsTab = new TabPage();
-            myRentalsDataGridView = new DataGridView();
-            myAccountTab = new TabPage();
+            myRentalsTabPage = new TabPage();
             endRentalButton = new Button();
+            myRentalsDataGridView = new DataGridView();
+            myAccountTabPage = new TabPage();
+            rentalsHistoryTabPage = new TabPage();
+            rentalsHistoryDataGridView = new DataGridView();
             mainTabControl.SuspendLayout();
-            booksTab.SuspendLayout();
+            booksTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)booksDataGridView).BeginInit();
-            rentalsTab.SuspendLayout();
+            myRentalsTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)myRentalsDataGridView).BeginInit();
+            rentalsHistoryTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)rentalsHistoryDataGridView).BeginInit();
             SuspendLayout();
             // 
             // welcomeLabel
@@ -65,25 +69,27 @@
             // 
             // mainTabControl
             // 
-            mainTabControl.Controls.Add(booksTab);
-            mainTabControl.Controls.Add(rentalsTab);
-            mainTabControl.Controls.Add(myAccountTab);
+            mainTabControl.Controls.Add(booksTabPage);
+            mainTabControl.Controls.Add(myRentalsTabPage);
+            mainTabControl.Controls.Add(myAccountTabPage);
+            mainTabControl.Controls.Add(rentalsHistoryTabPage);
             mainTabControl.Location = new Point(22, 43);
             mainTabControl.Name = "mainTabControl";
             mainTabControl.SelectedIndex = 0;
             mainTabControl.Size = new Size(751, 395);
             mainTabControl.TabIndex = 3;
+            mainTabControl.SelectedIndexChanged += mainTabControl_SelectedIndexChanged;
             // 
-            // booksTab
+            // booksTabPage
             // 
-            booksTab.Controls.Add(booksDataGridView);
-            booksTab.Location = new Point(4, 24);
-            booksTab.Name = "booksTab";
-            booksTab.Padding = new Padding(3);
-            booksTab.Size = new Size(743, 367);
-            booksTab.TabIndex = 0;
-            booksTab.Text = "Books";
-            booksTab.UseVisualStyleBackColor = true;
+            booksTabPage.Controls.Add(booksDataGridView);
+            booksTabPage.Location = new Point(4, 24);
+            booksTabPage.Name = "booksTabPage";
+            booksTabPage.Padding = new Padding(3);
+            booksTabPage.Size = new Size(743, 367);
+            booksTabPage.TabIndex = 0;
+            booksTabPage.Text = "Books";
+            booksTabPage.UseVisualStyleBackColor = true;
             // 
             // booksDataGridView
             // 
@@ -93,36 +99,17 @@
             booksDataGridView.Size = new Size(743, 367);
             booksDataGridView.TabIndex = 0;
             // 
-            // rentalsTab
+            // myRentalsTabPage
             // 
-            rentalsTab.Controls.Add(endRentalButton);
-            rentalsTab.Controls.Add(myRentalsDataGridView);
-            rentalsTab.Location = new Point(4, 24);
-            rentalsTab.Name = "rentalsTab";
-            rentalsTab.Padding = new Padding(3);
-            rentalsTab.Size = new Size(743, 367);
-            rentalsTab.TabIndex = 1;
-            rentalsTab.Text = "My Rentals";
-            rentalsTab.UseVisualStyleBackColor = true;
-            // 
-            // myRentalsDataGridView
-            // 
-            myRentalsDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            myRentalsDataGridView.Location = new Point(0, 0);
-            myRentalsDataGridView.Name = "myRentalsDataGridView";
-            myRentalsDataGridView.Size = new Size(645, 367);
-            myRentalsDataGridView.TabIndex = 0;
-            myRentalsDataGridView.CellClick += rentalsDataGridView_CellClick;
-            // 
-            // myAccountTab
-            // 
-            myAccountTab.Location = new Point(4, 24);
-            myAccountTab.Name = "myAccountTab";
-            myAccountTab.Padding = new Padding(3);
-            myAccountTab.Size = new Size(743, 367);
-            myAccountTab.TabIndex = 2;
-            myAccountTab.Text = "My Account";
-            myAccountTab.UseVisualStyleBackColor = true;
+            myRentalsTabPage.Controls.Add(endRentalButton);
+            myRentalsTabPage.Controls.Add(myRentalsDataGridView);
+            myRentalsTabPage.Location = new Point(4, 24);
+            myRentalsTabPage.Name = "myRentalsTabPage";
+            myRentalsTabPage.Padding = new Padding(3);
+            myRentalsTabPage.Size = new Size(743, 367);
+            myRentalsTabPage.TabIndex = 1;
+            myRentalsTabPage.Text = "My Rentals";
+            myRentalsTabPage.UseVisualStyleBackColor = true;
             // 
             // endRentalButton
             // 
@@ -134,21 +121,61 @@
             endRentalButton.UseVisualStyleBackColor = true;
             endRentalButton.Click += endRentalButton_Click;
             // 
+            // myRentalsDataGridView
+            // 
+            myRentalsDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            myRentalsDataGridView.Location = new Point(0, 0);
+            myRentalsDataGridView.Name = "myRentalsDataGridView";
+            myRentalsDataGridView.Size = new Size(645, 367);
+            myRentalsDataGridView.TabIndex = 0;
+            myRentalsDataGridView.CellClick += rentalsDataGridView_CellClick;
+            // 
+            // myAccountTabPage
+            // 
+            myAccountTabPage.Location = new Point(4, 24);
+            myAccountTabPage.Name = "myAccountTabPage";
+            myAccountTabPage.Padding = new Padding(3);
+            myAccountTabPage.Size = new Size(743, 367);
+            myAccountTabPage.TabIndex = 2;
+            myAccountTabPage.Text = "My Account";
+            myAccountTabPage.UseVisualStyleBackColor = true;
+            // 
+            // rentalsHistoryTabPage
+            // 
+            rentalsHistoryTabPage.Controls.Add(rentalsHistoryDataGridView);
+            rentalsHistoryTabPage.Location = new Point(4, 24);
+            rentalsHistoryTabPage.Name = "rentalsHistoryTabPage";
+            rentalsHistoryTabPage.Padding = new Padding(3);
+            rentalsHistoryTabPage.Size = new Size(743, 367);
+            rentalsHistoryTabPage.TabIndex = 3;
+            rentalsHistoryTabPage.Text = "Rentals History";
+            rentalsHistoryTabPage.UseVisualStyleBackColor = true;
+            // 
+            // rentalsHistoryDataGridView
+            // 
+            rentalsHistoryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            rentalsHistoryDataGridView.Location = new Point(0, 0);
+            rentalsHistoryDataGridView.Name = "rentalsHistoryDataGridView";
+            rentalsHistoryDataGridView.Size = new Size(743, 367);
+            rentalsHistoryDataGridView.TabIndex = 0;
+            // 
             // ReaderMainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(mainTabControl);
             Controls.Add(logoutButton);
             Controls.Add(welcomeLabel);
+            Controls.Add(mainTabControl);
             Name = "ReaderMainForm";
             Text = "ReaderMainForm";
             mainTabControl.ResumeLayout(false);
-            booksTab.ResumeLayout(false);
+            booksTabPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)booksDataGridView).EndInit();
-            rentalsTab.ResumeLayout(false);
+            myRentalsTabPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)myRentalsDataGridView).EndInit();
+            rentalsHistoryTabPage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)rentalsHistoryDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -158,11 +185,13 @@
         private Label welcomeLabel;
         private Button logoutButton;
         private TabControl mainTabControl;
-        private TabPage booksTab;
-        private TabPage rentalsTab;
-        private TabPage myAccountTab;
+        private TabPage booksTabPage;
+        private TabPage myRentalsTabPage;
+        private TabPage myAccountTabPage;
         private DataGridView booksDataGridView;
         private DataGridView myRentalsDataGridView;
         private Button endRentalButton;
+        private TabPage rentalsHistoryTabPage;
+        private DataGridView rentalsHistoryDataGridView;
     }
 }

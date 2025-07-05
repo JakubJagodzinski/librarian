@@ -20,9 +20,49 @@ namespace librarian.Forms
             _userId = userId;
             _loginForm = loginForm;
 
+            LoadAllRequiredData();
+
+            AddVisibleChanged();
+        }
+
+        private void AddVisibleChanged()
+        {
+            this.VisibleChanged += (s, e) =>
+            {
+                if (this.Visible)
+                {
+                    LoadAllRequiredData();
+                }
+            };
+        }
+
+        private void LoadAllRequiredData()
+        {
             LoadUserData();
             LoadBooks();
-            LoadRentals();
+            LoadMyRentals();
+            LoadRentalsHistory();
+        }
+
+        private void mainTabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (mainTabControl.SelectedTab == mainTabControl.TabPages["booksTabPage"])
+            {
+                LoadBooks();
+            }
+            if (mainTabControl.SelectedTab == mainTabControl.TabPages["myRentalsTabPage"])
+            {
+                LoadMyRentals();
+                _selectedRentalId = null;
+            }
+            if (mainTabControl.SelectedTab == mainTabControl.TabPages["accountTabPage"])
+            {
+                LoadUserData();
+            }
+            if (mainTabControl.SelectedTab == mainTabControl.TabPages["rentalsHistoryTabPage"])
+            {
+                LoadRentalsHistory();
+            }
         }
 
         private void LoadBooks()
@@ -46,7 +86,7 @@ namespace librarian.Forms
             }
         }
 
-        private void LoadRentals()
+        private void LoadMyRentals()
         {
             using (var db = new LibraryDbContext())
             {
@@ -65,6 +105,29 @@ namespace librarian.Forms
 
                 myRentalsDataGridView.DataSource = rentals;
                 myRentalsDataGridView.Columns["RentalId"].Visible = false;
+            }
+        }
+
+        private void LoadRentalsHistory()
+        {
+            using (var db = new LibraryDbContext())
+            {
+                var rentals = db.Rentals
+                    .Include(r => r.Book)
+                    .Include(r => r.Reader)
+                    .Where(r => r.ReaderId == _userId && r.ReturnDate != null)
+                    .Select(r => new
+                    {
+                        r.RentalId,
+                        r.Book.Title,
+                        RentalDate = r.RentalDate.ToShortDateString(),
+                        PlannedReturnDate = r.PlannedReturnDate.ToShortDateString(),
+                        ReturnDate = r.ReturnDate.Value.ToShortDateString()
+                    })
+                    .ToList();
+
+                rentalsHistoryDataGridView.DataSource = rentals;
+                rentalsHistoryDataGridView.Columns["RentalId"].Visible = false;
             }
         }
 
@@ -133,8 +196,8 @@ namespace librarian.Forms
                     db.SaveChanges();
 
                     MessageBox.Show("Rental successfully ended.");
-                    LoadRentals();
-                    LoadBooks();
+
+                    LoadMyRentals();
                 }
                 else
                 {

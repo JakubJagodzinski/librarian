@@ -55,14 +55,17 @@ namespace librarian.Forms
             if (tabControl1.SelectedTab == tabControl1.TabPages["blacklistedReadersTabPage"])
             {
                 LoadBlacklistedReaders();
+                _selectedBlacklistEntryId = null;
             }
             if (tabControl1.SelectedTab == tabControl1.TabPages["readersTabPage"])
             {
                 LoadReaders();
+                _selectedReaderId = null;
             }
             if (tabControl1.SelectedTab == tabControl1.TabPages["booksTabPage"])
             {
                 LoadBooks();
+                _selectedBookId = null;
             }
         }
 
@@ -192,9 +195,8 @@ namespace librarian.Forms
             var blacklistReaderForm = new BlacklistReaderForm(_selectedReaderId.Value, this);
             blacklistReaderForm.StartPosition = FormStartPosition.Manual;
             blacklistReaderForm.Location = this.Location;
-
-            this.Hide();
             blacklistReaderForm.Show();
+            this.Hide();
         }
 
         private void removeFromBlacklistButton_Click(object sender, EventArgs e)
@@ -215,6 +217,7 @@ namespace librarian.Forms
                     db.SaveChanges();
 
                     MessageBox.Show("Blacklisted reader entry removed.");
+
                     LoadBlacklistedReaders();
                 }
                 else
