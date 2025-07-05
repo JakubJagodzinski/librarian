@@ -8,5 +8,6 @@
         public int PublishedYear { get; set; }
         public int Pages { get; set; }
         public int InStock { get; set; }
+        public string Genres { get; set; } = string.Empty;
     }
 }

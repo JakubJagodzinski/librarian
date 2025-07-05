@@ -85,17 +85,24 @@ namespace librarian.Forms
         {
             using (var db = new LibraryDbContext())
             {
-                var books = new SortableBindingList<BookDisplayDto>(db.Books
-                    .Include(b => b.Author)
-                    .Select(b => new BookDisplayDto
-                    {
-                        BookId = b.BookId,
-                        Title = b.Title,
-                        Author = b.Author.AuthorFullName ?? "",
-                        PublishedYear = b.PublishedYear,
-                        Pages = b.Pages,
-                        InStock = b.InStock
-                    }).ToList());
+                var books = new SortableBindingList<BookDisplayDto>(
+                    db.Books
+                      .Include(b => b.Author)
+                      .Include(b => b.BookGenres)
+                          .ThenInclude(bg => bg.Genre)
+                      .Select(b => new BookDisplayDto
+                      {
+                          BookId = b.BookId,
+                          Title = b.Title,
+                          Author = b.Author.AuthorFullName ?? "",
+                          PublishedYear = b.PublishedYear,
+                          Pages = b.Pages,
+                          InStock = b.InStock,
+                          Genres = string.Join(", ", b.BookGenres
+                              .Where(bg => bg.Genre != null)
+                              .Select(bg => bg.Genre.GenreName))
+                      })
+                      .ToList());
 
                 booksDataGridView.DataSource = books;
 
@@ -103,6 +110,25 @@ namespace librarian.Forms
                 {
                     col.SortMode = DataGridViewColumnSortMode.Automatic;
                 }
+
+                booksDataGridView.CellFormatting -= booksDataGridView_CellFormatting;
+                booksDataGridView.CellFormatting += booksDataGridView_CellFormatting;
+            }
+        }
+
+        private void booksDataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (booksDataGridView.Columns[e.ColumnIndex].Name == "Genres" && e.Value != null)
+            {
+                var genreList = e.Value.ToString()
+                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(g => g.Trim())
+                    .Where(g => !string.IsNullOrWhiteSpace(g))
+                    .ToList();
+
+                e.Value = string.Join(", ", genreList);
+
+                booksDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText = string.Join("\n", genreList);
             }
         }
 
