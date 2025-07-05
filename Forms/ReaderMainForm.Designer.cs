@@ -39,6 +39,7 @@
             myAccountTabPage = new TabPage();
             rentalsHistoryTabPage = new TabPage();
             rentalsHistoryDataGridView = new DataGridView();
+            rentBookButton = new Button();
             mainTabControl.SuspendLayout();
             booksTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)booksDataGridView).BeginInit();
@@ -82,6 +83,7 @@
             // 
             // booksTabPage
             // 
+            booksTabPage.Controls.Add(rentBookButton);
             booksTabPage.Controls.Add(booksDataGridView);
             booksTabPage.Location = new Point(4, 24);
             booksTabPage.Name = "booksTabPage";
@@ -96,8 +98,9 @@
             booksDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             booksDataGridView.Location = new Point(0, 0);
             booksDataGridView.Name = "booksDataGridView";
-            booksDataGridView.Size = new Size(743, 367);
+            booksDataGridView.Size = new Size(645, 367);
             booksDataGridView.TabIndex = 0;
+            booksDataGridView.CellClick += booksDataGridView_CellClick;
             // 
             // myRentalsTabPage
             // 
@@ -159,6 +162,16 @@
             rentalsHistoryDataGridView.Size = new Size(743, 367);
             rentalsHistoryDataGridView.TabIndex = 0;
             // 
+            // rentBookButton
+            // 
+            rentBookButton.Location = new Point(651, 6);
+            rentBookButton.Name = "rentBookButton";
+            rentBookButton.Size = new Size(86, 23);
+            rentBookButton.TabIndex = 1;
+            rentBookButton.Text = "Rent a book";
+            rentBookButton.UseVisualStyleBackColor = true;
+            rentBookButton.Click += rentBookButton_Click;
+            // 
             // ReaderMainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -193,5 +206,6 @@
         private Button endRentalButton;
         private TabPage rentalsHistoryTabPage;
         private DataGridView rentalsHistoryDataGridView;
+        private Button rentBookButton;
     }
 }

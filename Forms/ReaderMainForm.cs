@@ -1,4 +1,5 @@
 ﻿using librarian.Data;
+using librarian.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace librarian.Forms
@@ -8,6 +9,8 @@ namespace librarian.Forms
         private readonly int _userId;
 
         private int? _selectedRentalId = null;
+
+        private int? _selectedBookId = null;
 
         private BaseForm _loginForm;
 
@@ -49,6 +52,7 @@ namespace librarian.Forms
             if (mainTabControl.SelectedTab == mainTabControl.TabPages["booksTabPage"])
             {
                 LoadBooks();
+                _selectedBookId = null;
             }
             if (mainTabControl.SelectedTab == mainTabControl.TabPages["myRentalsTabPage"])
             {
@@ -156,8 +160,15 @@ namespace librarian.Forms
             {
                 var row = myRentalsDataGridView.Rows[e.RowIndex];
                 _selectedRentalId = Convert.ToInt32(row.Cells["RentalId"].Value);
+            }
+        }
 
-                //MessageBox.Show($"Selected RentalId: {selectedRentalId}");
+        private void booksDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                var row = booksDataGridView.Rows[e.RowIndex];
+                _selectedBookId = Convert.ToInt32(row.Cells["BookId"].Value);
             }
         }
 
@@ -205,5 +216,61 @@ namespace librarian.Forms
                 }
             }
         }
+
+        private void rentBookButton_Click(object sender, EventArgs e)
+        {
+            if (_selectedBookId == null)
+            {
+                MessageBox.Show("Please select a book to rent.");
+                return;
+            }
+
+            using (var db = new LibraryDbContext())
+            {
+                var book = db.Books.FirstOrDefault(b => b.BookId == _selectedBookId);
+
+                if (book == null)
+                {
+                    MessageBox.Show("Book not found in the database.");
+                    return;
+                }
+
+                if (book.InStock <= 0)
+                {
+                    MessageBox.Show("This book is currently out of stock.");
+                    return;
+                }
+
+                var popup = new PlannedReturnDateForm();
+                if (popup.ShowDialog() == DialogResult.OK)
+                {
+                    var plannedReturnDate = popup.PlannedReturnDate;
+
+                    if (plannedReturnDate <= DateTime.Today)
+                    {
+                        MessageBox.Show("Planned return date must be in the future.");
+                        return;
+                    }
+
+                    var rental = new Rental
+                    {
+                        BookId = book.BookId,
+                        ReaderId = _userId,
+                        RentalDate = DateTime.Today,
+                        PlannedReturnDate = plannedReturnDate.Value,
+                        ReturnDate = null
+                    };
+
+                    db.Rentals.Add(rental);
+                    book.InStock -= 1;
+                    db.SaveChanges();
+
+                    MessageBox.Show($"Book \"{book.Title}\" has been rented until {plannedReturnDate.Value.ToShortDateString()}.");
+
+                    LoadBooks();
+                }
+            }
+        }
+
     }
 }
