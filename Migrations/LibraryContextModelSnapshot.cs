@@ -62,8 +62,7 @@ namespace librarian.Migrations
 
                     b.HasKey("BlacklistedReaderId");
 
-                    b.HasIndex("ReaderId")
-                        .IsUnique();
+                    b.HasIndex("ReaderId");
 
                     b.ToTable("BlacklistedReaders");
                 });
@@ -77,6 +76,9 @@ namespace librarian.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookId"));
 
                     b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InStock")
                         .HasColumnType("int");
 
                     b.Property<int>("Pages")
@@ -134,6 +136,9 @@ namespace librarian.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("Photo")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<DateTime?>("TerminationDate")
                         .HasColumnType("datetime2");
 
@@ -182,6 +187,9 @@ namespace librarian.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("Photo")
+                        .HasColumnType("varbinary(max)");
+
                     b.HasKey("ReaderId");
 
                     b.ToTable("Readers");
@@ -197,6 +205,9 @@ namespace librarian.Migrations
 
                     b.Property<int>("BookId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("PlannedReturnDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ReaderId")
                         .HasColumnType("int");
@@ -240,9 +251,13 @@ namespace librarian.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("EmployeeId")
+                        .IsUnique()
+                        .HasFilter("[EmployeeId] IS NOT NULL");
 
-                    b.HasIndex("ReaderId");
+                    b.HasIndex("ReaderId")
+                        .IsUnique()
+                        .HasFilter("[ReaderId] IS NOT NULL");
 
                     b.ToTable("UserCredentials");
                 });
@@ -250,8 +265,8 @@ namespace librarian.Migrations
             modelBuilder.Entity("librarian.Models.BlacklistedReader", b =>
                 {
                     b.HasOne("librarian.Models.Reader", "Reader")
-                        .WithOne()
-                        .HasForeignKey("librarian.Models.BlacklistedReader", "ReaderId")
+                        .WithMany("BlacklistedEntries")
+                        .HasForeignKey("ReaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -310,12 +325,12 @@ namespace librarian.Migrations
             modelBuilder.Entity("librarian.Models.UserCredentials", b =>
                 {
                     b.HasOne("librarian.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId");
+                        .WithOne("UserCredentials")
+                        .HasForeignKey("librarian.Models.UserCredentials", "EmployeeId");
 
                     b.HasOne("librarian.Models.Reader", "Reader")
-                        .WithMany()
-                        .HasForeignKey("ReaderId");
+                        .WithOne("UserCredentials")
+                        .HasForeignKey("librarian.Models.UserCredentials", "ReaderId");
 
                     b.Navigation("Employee");
 
@@ -332,9 +347,20 @@ namespace librarian.Migrations
                     b.Navigation("BookGenres");
                 });
 
+            modelBuilder.Entity("librarian.Models.Employee", b =>
+                {
+                    b.Navigation("UserCredentials")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("librarian.Models.Reader", b =>
                 {
+                    b.Navigation("BlacklistedEntries");
+
                     b.Navigation("Rentals");
+
+                    b.Navigation("UserCredentials")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
