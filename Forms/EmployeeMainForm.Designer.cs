@@ -163,6 +163,9 @@
             // 
             // readersDataGridView
             // 
+            readersDataGridView.AllowUserToAddRows = false;
+            readersDataGridView.AllowUserToDeleteRows = false;
+            readersDataGridView.AllowUserToResizeRows = false;
             readersDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             readersDataGridView.Location = new Point(0, 0);
             readersDataGridView.Name = "readersDataGridView";
@@ -194,6 +197,9 @@
             // 
             // blacklistedReadersDataGridView
             // 
+            blacklistedReadersDataGridView.AllowUserToAddRows = false;
+            blacklistedReadersDataGridView.AllowUserToDeleteRows = false;
+            blacklistedReadersDataGridView.AllowUserToResizeRows = false;
             blacklistedReadersDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             blacklistedReadersDataGridView.Location = new Point(0, 0);
             blacklistedReadersDataGridView.Name = "blacklistedReadersDataGridView";
