@@ -12,9 +12,9 @@ namespace librarian.Forms
 
         private int? _selectedBlacklistEntryId = null;
 
-        private BaseForm _loginForm;
+        private int? _selectedBookId = null;
 
-        private BaseForm _addBookForm;
+        private BaseForm _loginForm;
 
         public EmployeeMainForm(int userId, BaseForm loginForm)
         {
@@ -119,6 +119,7 @@ namespace librarian.Forms
                 booksDataGridView.DataSource = books
                     .Select(b => new
                     {
+                        b.BookId,
                         b.Title,
                         Author = b.Author?.AuthorFullName ?? "",
                         b.PublishedYear,
@@ -169,6 +170,17 @@ namespace librarian.Forms
             }
         }
 
+        private void booksDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                var row = booksDataGridView.Rows[e.RowIndex];
+                _selectedBookId = Convert.ToInt32(row.Cells["BookId"].Value);
+
+                //MessageBox.Show($"Selected BookId: {selectedBookId}");
+            }
+        }
+
         private void blacklistReaderButton_Click(object sender, EventArgs e)
         {
             if (_selectedReaderId == null)
@@ -214,14 +226,25 @@ namespace librarian.Forms
 
         private void addBookButton_Click(object sender, EventArgs e)
         {
-            if (_addBookForm == null)
+            var addBookForm = new AddBookForm(this);
+            addBookForm.StartPosition = FormStartPosition.Manual;
+            addBookForm.Location = this.Location;
+            addBookForm.Show();
+            this.Hide();
+        }
+
+        private void editBookButton_Click(object sender, EventArgs e)
+        {
+            if (_selectedBookId == null)
             {
-                _addBookForm = new AddBookForm(this);
-                _addBookForm.StartPosition = FormStartPosition.Manual;
-                _addBookForm.Location = this.Location;
+                MessageBox.Show("Select a book to edit.");
+                return;
             }
 
-            _addBookForm.Show();
+            var editBookForm = new EditBookForm(this, _selectedBookId.Value);
+            editBookForm.StartPosition = FormStartPosition.Manual;
+            editBookForm.Location = this.Location;
+            editBookForm.Show();
             this.Hide();
         }
     }

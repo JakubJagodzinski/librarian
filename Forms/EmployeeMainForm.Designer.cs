@@ -32,6 +32,8 @@
             logoutButton = new Button();
             tabControl1 = new TabControl();
             booksTabPage = new TabPage();
+            editBookButton = new Button();
+            addBookButton = new Button();
             booksDataGridView = new DataGridView();
             readersTabPage = new TabPage();
             blacklistReaderButton = new Button();
@@ -40,8 +42,6 @@
             removeFromBlacklistButton = new Button();
             blacklistedReadersDataGridView = new DataGridView();
             pageSetupDialog1 = new PageSetupDialog();
-            addBookButton = new Button();
-            editBookButton = new Button();
             tabControl1.SuspendLayout();
             booksTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)booksDataGridView).BeginInit();
@@ -95,6 +95,26 @@
             booksTabPage.Text = "Books";
             booksTabPage.UseVisualStyleBackColor = true;
             // 
+            // editBookButton
+            // 
+            editBookButton.Location = new Point(652, 35);
+            editBookButton.Name = "editBookButton";
+            editBookButton.Size = new Size(75, 23);
+            editBookButton.TabIndex = 2;
+            editBookButton.Text = "Edit book";
+            editBookButton.UseVisualStyleBackColor = true;
+            editBookButton.Click += editBookButton_Click;
+            // 
+            // addBookButton
+            // 
+            addBookButton.Location = new Point(652, 6);
+            addBookButton.Name = "addBookButton";
+            addBookButton.Size = new Size(75, 23);
+            addBookButton.TabIndex = 1;
+            addBookButton.Text = "Add book";
+            addBookButton.UseVisualStyleBackColor = true;
+            addBookButton.Click += addBookButton_Click;
+            // 
             // booksDataGridView
             // 
             booksDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -102,6 +122,7 @@
             booksDataGridView.Name = "booksDataGridView";
             booksDataGridView.Size = new Size(645, 320);
             booksDataGridView.TabIndex = 0;
+            booksDataGridView.CellClick += booksDataGridView_CellClick;
             // 
             // readersTabPage
             // 
@@ -164,25 +185,6 @@
             blacklistedReadersDataGridView.Size = new Size(645, 300);
             blacklistedReadersDataGridView.TabIndex = 0;
             blacklistedReadersDataGridView.CellClick += blacklistedReadersDataGridView_CellClick;
-            // 
-            // addBookButton
-            // 
-            addBookButton.Location = new Point(652, 6);
-            addBookButton.Name = "addBookButton";
-            addBookButton.Size = new Size(75, 23);
-            addBookButton.TabIndex = 1;
-            addBookButton.Text = "Add book";
-            addBookButton.UseVisualStyleBackColor = true;
-            addBookButton.Click += addBookButton_Click;
-            // 
-            // editBookButton
-            // 
-            editBookButton.Location = new Point(652, 35);
-            editBookButton.Name = "editBookButton";
-            editBookButton.Size = new Size(75, 23);
-            editBookButton.TabIndex = 2;
-            editBookButton.Text = "Edit book";
-            editBookButton.UseVisualStyleBackColor = true;
             // 
             // EmployeeMainForm
             // 
