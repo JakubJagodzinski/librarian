@@ -5,7 +5,7 @@ namespace librarian.Data
 {
     public class LibraryDbContext : DbContext
     {
-        private String _connectionString = """Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = C:\Users\kubaj\source\repos\librarian\LibrarianDb.mdf; Integrated Security = True""";
+        private String _connectionString = """Data Source = (LocalDB)\MSSQLLocalDB; Initial Catalog=LibrarianDb; Integrated Security = True""";
 
         public DbSet<Book> Books { get; set; }
         public DbSet<Reader> Readers { get; set; }

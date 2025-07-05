@@ -1,4 +1,5 @@
 using librarian.Data;
+using librarian.Data.Initialization;
 using librarian.Data.Managers;
 using librarian.Data.Views;
 using librarian.Forms;
@@ -18,26 +19,7 @@ namespace librarian
             ApplicationConfiguration.Initialize();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            using (var context = new LibraryDbContext())
-            {
-                var seederManager = new SeederManager(context);
-                seederManager.Seed(true);
-
-                var triggerManager = new TriggerManager(context);
-                triggerManager.CreateTriggers();
-
-                var procedureManager = new ProcedureManager(context);
-                procedureManager.CreateProcedures();
-
-                var indexManager = new IndexManager(context);
-                indexManager.CreateIndexes();
-
-                var functionManager = new FunctionManager(context);
-                functionManager.CreateFunctions();
-
-                var viewManager = new ViewManager(context);
-                viewManager.CreateViews();
-            }
+            DatabaseInitializer.Initialize();
 
             Application.Run(new LoginForm());
 
