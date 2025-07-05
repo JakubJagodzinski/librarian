@@ -83,12 +83,13 @@ namespace librarian.Forms
                             BlacklistedReaderId = b.BlacklistedReaderId,
                             ReaderName = b.Reader.FullName ?? "",
                             Reason = b.Reason ?? "",
-                            BlacklistedDate = b.BlacklistedDate.ToShortDateString(),
-                            RemovalDate = b.RemovalDate.HasValue ? b.RemovalDate.Value.ToShortDateString() : "–"
+                            BlacklistedDate = b.BlacklistedDate
                         })
                         .ToList());
 
                 blacklistedReadersDataGridView.DataSource = blacklistedReaders;
+
+                blacklistedReadersDataGridView.Columns["BlacklistedDate"].DefaultCellStyle.Format = "dd.MM.yyyy";
 
                 foreach (DataGridViewColumn col in blacklistedReadersDataGridView.Columns)
                 {
@@ -112,6 +113,8 @@ namespace librarian.Forms
                     }).ToList());
 
                 readersDataGridView.DataSource = readers;
+
+                readersDataGridView.Columns["DateOfBirth"].DefaultCellStyle.Format = "dd.MM.yyyy";
 
                 foreach (DataGridViewColumn col in readersDataGridView.Columns)
                 {

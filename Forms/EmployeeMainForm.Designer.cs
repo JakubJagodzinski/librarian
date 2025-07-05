@@ -135,7 +135,7 @@
             booksDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             booksDataGridView.Location = new Point(0, 0);
             booksDataGridView.Name = "booksDataGridView";
-            booksDataGridView.Size = new Size(645, 320);
+            booksDataGridView.Size = new Size(645, 300);
             booksDataGridView.TabIndex = 0;
             booksDataGridView.CellClick += booksDataGridView_CellClick;
             // 

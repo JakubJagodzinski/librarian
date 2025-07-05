@@ -119,13 +119,17 @@ namespace librarian.Forms
                         {
                             RentalId = r.RentalId,
                             BookTitle = r.Book.Title,
-                            RentalDate = r.RentalDate.ToShortDateString(),
-                            PlannedReturnDate = r.PlannedReturnDate.ToShortDateString()
+                            RentalDate = r.RentalDate,
+                            PlannedReturnDate = r.PlannedReturnDate
                         })
                         .ToList());
 
                 myRentalsDataGridView.DataSource = rentals;
+
                 myRentalsDataGridView.Columns["RentalId"].Visible = false;
+
+                myRentalsDataGridView.Columns["RentalDate"].DefaultCellStyle.Format = "dd.MM.yyyy";
+                myRentalsDataGridView.Columns["PlannedReturnDate"].DefaultCellStyle.Format = "dd.MM.yyyy";
 
                 foreach (DataGridViewColumn col in myRentalsDataGridView.Columns)
                 {
@@ -147,14 +151,19 @@ namespace librarian.Forms
                         {
                             RentalId = r.RentalId,
                             BookTitle = r.Book.Title,
-                            RentalDate = r.RentalDate.ToShortDateString(),
-                            PlannedReturnDate = r.PlannedReturnDate.ToShortDateString(),
-                            ReturnDate = r.ReturnDate.HasValue ? r.ReturnDate.Value.ToShortDateString() : ""
+                            RentalDate = r.RentalDate,
+                            PlannedReturnDate = r.PlannedReturnDate,
+                            ReturnDate = r.ReturnDate.Value
                         })
                         .ToList());
 
                 rentalsHistoryDataGridView.DataSource = rentals;
+
                 rentalsHistoryDataGridView.Columns["RentalId"].Visible = false;
+
+                rentalsHistoryDataGridView.Columns["RentalDate"].DefaultCellStyle.Format = "dd.MM.yyyy";
+                rentalsHistoryDataGridView.Columns["PlannedReturnDate"].DefaultCellStyle.Format = "dd.MM.yyyy";
+                rentalsHistoryDataGridView.Columns["ReturnDate"].DefaultCellStyle.Format = "dd.MM.yyyy";
 
                 foreach (DataGridViewColumn col in rentalsHistoryDataGridView.Columns)
                 {
