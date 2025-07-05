@@ -1,5 +1,5 @@
-using System.Text;
 using librarian.Data;
+using librarian.Data.Managers;
 using librarian.Forms;
 
 namespace librarian
@@ -19,7 +19,20 @@ namespace librarian
 
             using (var context = new LibraryDbContext())
             {
-                context.Seed();
+                var seederManager = new SeederManager(context);
+                seederManager.Seed(true);
+
+                var triggerManager = new TriggerManager(context);
+                triggerManager.CreateTriggers();
+
+                var procedureManager = new ProcedureManager(context);
+                procedureManager.CreateProcedures();
+
+                var indexManager = new IndexManager(context);
+                indexManager.CreateIndexes();
+
+                var functionManager = new FunctionManager(context);
+                functionManager.CreateFunctions();
             }
 
             Application.Run(new LoginForm());

@@ -1,12 +1,12 @@
-﻿using librarian.Data.Seeders;
-using librarian.Models;
+﻿using librarian.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace librarian.Data
 {
     public class LibraryDbContext : DbContext
     {
-        // DbSet properties for your models
+        private String _connectionString = """Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = C:\Users\kubaj\source\repos\librarian\LibrarianDb.mdf; Integrated Security = True""";
+
         public DbSet<Book> Books { get; set; }
         public DbSet<Reader> Readers { get; set; }
         public DbSet<Author> Authors { get; set; }
@@ -18,13 +18,16 @@ namespace librarian.Data
         public DbSet<UserCredentials> UserCredentials { get; set; }
         public object UserCredential { get; internal set; }
 
-        // Configure the database connection
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("""Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = C:\Users\kubaj\source\repos\librarian\LibrarianDb.mdf; Integrated Security = True""");
+            optionsBuilder.UseSqlServer(_connectionString);
         }
 
-        // Configure model relationships
+        public String GetConnectionString()
+        {
+            return _connectionString;
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Book -> Author
@@ -83,27 +86,6 @@ namespace librarian.Data
             {
                 Console.WriteLine($"Connection failed: {ex.Message}");
                 return false;
-            }
-        }
-
-        public void Seed()
-        {
-
-            var seeders = new List<ISeeder>
-            {
-                new AuthorSeeder(),
-                new BookSeeder(),
-                new ReaderSeeder(),
-                new BlacklistedReaderSeeder(),
-                new GenreSeeder(),
-                new EmployeeSeeder(),
-                new RentalSeeder(),
-                new BookGenreSeeder()
-            };
-
-            foreach (var seeder in seeders)
-            {
-                seeder.Seed(this, true);
             }
         }
 

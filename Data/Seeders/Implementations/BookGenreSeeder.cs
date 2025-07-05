@@ -1,4 +1,6 @@
 ﻿using librarian.Models;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace librarian.Data.Seeders.Implementations
 {
@@ -20,7 +22,7 @@ namespace librarian.Data.Seeders.Implementations
                     }
 
                     var rng = new Random();
-                    var bookGenresList = new List<BookGenre>();
+                    var inserts = new List<string>();
 
                     foreach (var book in books)
                     {
@@ -31,16 +33,19 @@ namespace librarian.Data.Seeders.Implementations
 
                         foreach (var genre in selectedGenres)
                         {
-                            bookGenresList.Add(new BookGenre
-                            {
-                                BookId = book.BookId,
-                                GenreId = genre.GenreId
-                            });
+                            inserts.Add($"({book.BookId}, {genre.GenreId})");
                         }
                     }
 
-                    context.BookGenres.AddRange(bookGenresList);
-                    context.SaveChanges();
+                    if (inserts.Any())
+                    {
+                        var insertSql = $@"
+                            INSERT INTO BookGenres (BookId, GenreId)
+                            VALUES {string.Join(", ", inserts)};
+                        ";
+
+                        context.Database.ExecuteSqlRaw(insertSql);
+                    }
                 }
             }
             catch (Exception ex)

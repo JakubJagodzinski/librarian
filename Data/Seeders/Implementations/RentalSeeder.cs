@@ -1,76 +1,68 @@
 ﻿using librarian.Models;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace librarian.Data.Seeders.Implementations
 {
     public class RentalSeeder : ISeeder
     {
-        private void ClearTable(LibraryDbContext context)
-        {
-            var rentals = context.Rentals.ToList();
-            context.Rentals.RemoveRange(rentals);
-            context.SaveChanges();
-        }
-
         public void Seed(LibraryDbContext context, bool clearTable)
         {
             try
             {
+                using var conn = new SqlConnection(context.Database.GetConnectionString());
+                conn.Open();
+
                 if (clearTable)
                 {
-                    ClearTable(context);
+                    using var clearCmd = new SqlCommand("DELETE FROM Rentals", conn);
+                    clearCmd.ExecuteNonQuery();
                 }
 
-                if (!context.Rentals.Any())
+                var readers = context.Readers.Select(r => r.ReaderId).ToList();
+                var books = context.Books.Select(b => new { b.BookId, b.InStock }).ToList();
+                if (!readers.Any() || !books.Any())
                 {
-                    var readers = context.Readers.ToList();
-                    var books = context.Books.ToList();
+                    MessageBox.Show("No readers or books to seed rentals.", "Seeder Info");
+                    return;
+                }
 
-                    if (!readers.Any() || !books.Any())
+                var rng = new Random();
+                int rentalsAdded = 0;
+
+                foreach (var readerId in readers)
+                {
+                    for (int i = 0; i < 50; i++)
                     {
-                        MessageBox.Show("No readers or books to create rentals.", "Seeder Info");
-                        return;
-                    }
+                        var book = books[rng.Next(books.Count)];
 
-                    var random = new Random();
-                    var rentals = new List<Rental>();
-
-                    foreach (var reader in readers)
-                    {
-                        int rentalCount = 50;
-
-                        for (int i = 0; i < rentalCount; i++)
+                        if (!IsBookAvailable(conn, book.BookId))
                         {
-                            var book = books[random.Next(books.Count)];
+                            continue;
+                        }   
 
-                            // Rental date: from 3 years ago up to today
-                            DateTime rentalDate = DateTime.Today.AddDays(-random.Next(0, 3 * 365));
-
-                            // Planned return date: 10-30 days after rental
-                            DateTime plannedReturnDate = rentalDate.AddDays(random.Next(10, 31));
-
-                            // Return date: maybe returned, maybe not
-                            DateTime? returnDate = null;
-                            if (random.NextDouble() < 0.7) // 70% chance it was returned
-                            {
-                                // Returned 1-60 days after rental
-                                returnDate = rentalDate.AddDays(random.Next(1, 61));
-                                if (returnDate > DateTime.Today)
-                                    returnDate = DateTime.Today; // no return dates in future
-                            }
-
-                            rentals.Add(new Rental
-                            {
-                                ReaderId = reader.ReaderId,
-                                BookId = book.BookId,
-                                RentalDate = rentalDate,
-                                PlannedReturnDate = plannedReturnDate,
-                                ReturnDate = returnDate
-                            });
+                        DateTime rentalDate = DateTime.Today.AddDays(-rng.Next(0, 3 * 365));
+                        DateTime plannedReturnDate = rentalDate.AddDays(rng.Next(10, 30));
+                        DateTime? returnDate = null;
+                        if (rng.NextDouble() < 0.7)
+                        {
+                            var tmp = rentalDate.AddDays(rng.Next(1, 60));
+                            returnDate = tmp > DateTime.Today ? DateTime.Today : tmp;
                         }
-                    }
 
-                    context.Rentals.AddRange(rentals);
-                    context.SaveChanges();
+                        var insertCmd = new SqlCommand(@"
+                        INSERT INTO Rentals (ReaderId, BookId, RentalDate, PlannedReturnDate, ReturnDate)
+                        VALUES (@ReaderId, @BookId, @RentalDate, @PlannedReturnDate, @ReturnDate)", conn);
+
+                        insertCmd.Parameters.AddWithValue("@ReaderId", readerId);
+                        insertCmd.Parameters.AddWithValue("@BookId", book.BookId);
+                        insertCmd.Parameters.AddWithValue("@RentalDate", rentalDate);
+                        insertCmd.Parameters.AddWithValue("@PlannedReturnDate", plannedReturnDate);
+                        insertCmd.Parameters.AddWithValue("@ReturnDate", (object?)returnDate ?? DBNull.Value);
+
+                        insertCmd.ExecuteNonQuery();
+                        rentalsAdded++;
+                    }
                 }
             }
             catch (Exception ex)
@@ -78,5 +70,21 @@ namespace librarian.Data.Seeders.Implementations
                 MessageBox.Show($"Rental seeding error: {ex.Message}\nInner: {ex.InnerException?.Message}", "Seeder Error");
             }
         }
+
+        private bool IsBookAvailable(SqlConnection conn, int bookId)
+        {
+            using var cmd = new SqlCommand(@"
+        SELECT CASE 
+            WHEN b.InStock > dbo.GetActiveRentalsCount(@BookId) THEN 1
+            ELSE 0
+        END
+        FROM Books b
+        WHERE b.BookId = @BookId", conn);
+
+            cmd.Parameters.AddWithValue("@BookId", bookId);
+            var result = cmd.ExecuteScalar();
+            return (int)(result ?? 0) == 1;
+        }
     }
+
 }

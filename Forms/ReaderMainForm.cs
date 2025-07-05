@@ -1,6 +1,7 @@
-﻿using librarian.Data;
+﻿using System.Data;
+using librarian.Data;
 using librarian.Dto;
-using librarian.Models;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using ScottPlot;
 
@@ -85,24 +86,27 @@ namespace librarian.Forms
         {
             using (var db = new LibraryDbContext())
             {
+                var booksRaw = db.Books
+                    .Include(b => b.Author)
+                    .Include(b => b.BookGenres)
+                        .ThenInclude(bg => bg.Genre)
+                    .ToList();
+
                 var books = new SortableBindingList<BookDisplayDto>(
-                    db.Books
-                      .Include(b => b.Author)
-                      .Include(b => b.BookGenres)
-                          .ThenInclude(bg => bg.Genre)
-                      .Select(b => new BookDisplayDto
-                      {
-                          BookId = b.BookId,
-                          Title = b.Title,
-                          Author = b.Author.AuthorFullName ?? "",
-                          PublishedYear = b.PublishedYear,
-                          Pages = b.Pages,
-                          InStock = b.InStock,
-                          Genres = string.Join(", ", b.BookGenres
-                              .Where(bg => bg.Genre != null)
-                              .Select(bg => bg.Genre.GenreName))
-                      })
-                      .ToList());
+                    booksRaw.Select(b => new BookDisplayDto
+                    {
+                        BookId = b.BookId,
+                        Title = b.Title,
+                        Author = b.Author?.AuthorFullName ?? "",
+                        PublishedYear = b.PublishedYear,
+                        Pages = b.Pages,
+                        InStock = b.InStock,
+                        Genres = string.Join(", ", b.BookGenres
+                            .Where(bg => bg.Genre != null)
+                            .Select(bg => bg.Genre.GenreName)),
+                        CurrentlyRented = GetActiveRentalCount(db, b.BookId)
+                    }).ToList()
+                );
 
                 booksDataGridView.DataSource = books;
 
@@ -114,6 +118,17 @@ namespace librarian.Forms
                 booksDataGridView.CellFormatting -= booksDataGridView_CellFormatting;
                 booksDataGridView.CellFormatting += booksDataGridView_CellFormatting;
             }
+        }
+
+        private int GetActiveRentalCount(LibraryDbContext context, int bookId)
+        {
+            using var conn = new SqlConnection(context.Database.GetConnectionString());
+            conn.Open();
+
+            using var cmd = new SqlCommand("SELECT dbo.GetActiveRentalsCount(@BookId)", conn);
+            cmd.Parameters.AddWithValue("@BookId", bookId);
+
+            return (int)(cmd.ExecuteScalar() ?? 0);
         }
 
         private void booksDataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -267,38 +282,53 @@ namespace librarian.Forms
             }
 
             var confirmResult = MessageBox.Show("Are you sure you want to end this rental?", "Confirm End Rental", MessageBoxButtons.YesNo);
-
             if (confirmResult == DialogResult.No)
             {
                 return;
             }
 
-            using (var db = new LibraryDbContext())
+            using (var context = new LibraryDbContext())
             {
-                var rental = db.Rentals
-                               .Include(r => r.Book)
-                               .FirstOrDefault(r => r.RentalId == _selectedRentalId);
+                var rental = context.Rentals
+                                    .Include(r => r.Book)
+                                    .FirstOrDefault(r => r.RentalId == _selectedRentalId);
 
-                if (rental != null)
-                {
-                    if (rental.ReturnDate != null)
-                    {
-                        MessageBox.Show("This rental is already ended.");
-                        return;
-                    }
-
-                    rental.ReturnDate = DateTime.Now;
-                    rental.Book.InStock += 1;
-
-                    db.SaveChanges();
-
-                    MessageBox.Show("Rental successfully ended.");
-
-                    LoadMyRentals();
-                }
-                else
+                if (rental == null)
                 {
                     MessageBox.Show("Rental not found.");
+                    return;
+                }
+
+                if (rental.ReturnDate != null)
+                {
+                    MessageBox.Show("This rental is already ended.");
+                    return;
+                }
+
+                try
+                {
+                    using (var conn = new SqlConnection(context.Database.GetConnectionString()))
+                    {
+                        conn.Open();
+
+                        using (var cmd = new SqlCommand("EndRentalProcedure", conn))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@RentalId", _selectedRentalId.Value);
+                            cmd.Parameters.AddWithValue("@ReturnDate", DateTime.Now);
+
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        conn.Close();
+                    }
+
+                    MessageBox.Show("Rental successfully ended.");
+                    LoadMyRentals();
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Error while ending rental: " + ex.Message);
                 }
             }
         }
@@ -325,49 +355,53 @@ namespace librarian.Forms
                 return;
             }
 
-            using (var db = new LibraryDbContext())
-            {
-                var book = db.Books.FirstOrDefault(b => b.BookId == _selectedBookId);
+            var popup = new PlannedReturnDateForm();
+            if (popup.ShowDialog() != DialogResult.OK)
+                return;
 
+            var plannedReturnDate = popup.PlannedReturnDate;
+
+            if (plannedReturnDate <= DateTime.Today)
+            {
+                MessageBox.Show("Planned return date must be in the future.");
+                return;
+            }
+
+            using (var context = new LibraryDbContext())
+            {
+                var book = context.Books.FirstOrDefault(b => b.BookId == _selectedBookId);
                 if (book == null)
                 {
                     MessageBox.Show("Book not found in the database.");
                     return;
                 }
 
-                if (book.InStock <= 0)
+                try
                 {
-                    MessageBox.Show("This book is currently out of stock.");
-                    return;
-                }
-
-                var popup = new PlannedReturnDateForm();
-                if (popup.ShowDialog() == DialogResult.OK)
-                {
-                    var plannedReturnDate = popup.PlannedReturnDate;
-
-                    if (plannedReturnDate <= DateTime.Today)
+                    using (var conn = new SqlConnection(context.Database.GetConnectionString()))
                     {
-                        MessageBox.Show("Planned return date must be in the future.");
-                        return;
+                        conn.Open();
+
+                        using (var cmd = new SqlCommand("RentBookProcedure", conn))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@BookId", _selectedBookId);
+                            cmd.Parameters.AddWithValue("@ReaderId", _userId);
+                            cmd.Parameters.AddWithValue("@RentalDate", DateTime.Today);
+                            cmd.Parameters.AddWithValue("@PlannedReturnDate", plannedReturnDate.Value);
+
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        conn.Close();
                     }
 
-                    var rental = new Rental
-                    {
-                        BookId = book.BookId,
-                        ReaderId = _userId,
-                        RentalDate = DateTime.Today,
-                        PlannedReturnDate = plannedReturnDate.Value,
-                        ReturnDate = null
-                    };
-
-                    db.Rentals.Add(rental);
-                    book.InStock -= 1;
-                    db.SaveChanges();
-
                     MessageBox.Show($"Book \"{book.Title}\" has been rented until {plannedReturnDate.Value.ToShortDateString()}.");
-
-                    LoadBooks();
+                    LoadBooks(); // Refresh book list
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show($"Failed to rent book: {ex.Message}");
                 }
             }
         }

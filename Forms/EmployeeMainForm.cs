@@ -1,5 +1,6 @@
 ﻿using librarian.Data;
 using librarian.Dto;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace librarian.Forms
@@ -127,24 +128,27 @@ namespace librarian.Forms
         {
             using (var db = new LibraryDbContext())
             {
+                var booksRaw = db.Books
+                    .Include(b => b.Author)
+                    .Include(b => b.BookGenres)
+                        .ThenInclude(bg => bg.Genre)
+                    .ToList();
+
                 var books = new SortableBindingList<BookDisplayDto>(
-                    db.Books
-                      .Include(b => b.Author)
-                      .Include(b => b.BookGenres)
-                          .ThenInclude(bg => bg.Genre)
-                      .Select(b => new BookDisplayDto
-                      {
-                          BookId = b.BookId,
-                          Title = b.Title,
-                          Author = b.Author.AuthorFullName ?? "",
-                          PublishedYear = b.PublishedYear,
-                          Pages = b.Pages,
-                          InStock = b.InStock,
-                          Genres = string.Join(", ", b.BookGenres
-                              .Where(bg => bg.Genre != null)
-                              .Select(bg => bg.Genre.GenreName))
-                      })
-                      .ToList());
+                    booksRaw.Select(b => new BookDisplayDto
+                    {
+                        BookId = b.BookId,
+                        Title = b.Title,
+                        Author = b.Author?.AuthorFullName ?? "",
+                        PublishedYear = b.PublishedYear,
+                        Pages = b.Pages,
+                        InStock = b.InStock,
+                        Genres = string.Join(", ", b.BookGenres
+                            .Where(bg => bg.Genre != null)
+                            .Select(bg => bg.Genre.GenreName)),
+                        CurrentlyRented = GetActiveRentalCount(db, b.BookId)
+                    }).ToList()
+                );
 
                 booksDataGridView.DataSource = books;
 
@@ -156,6 +160,17 @@ namespace librarian.Forms
                 booksDataGridView.CellFormatting -= booksDataGridView_CellFormatting;
                 booksDataGridView.CellFormatting += booksDataGridView_CellFormatting;
             }
+        }
+
+        private int GetActiveRentalCount(LibraryDbContext context, int bookId)
+        {
+            using var conn = new SqlConnection(context.Database.GetConnectionString());
+            conn.Open();
+
+            using var cmd = new SqlCommand("SELECT dbo.GetActiveRentalsCount(@BookId)", conn);
+            cmd.Parameters.AddWithValue("@BookId", bookId);
+
+            return (int)(cmd.ExecuteScalar() ?? 0);
         }
 
         private void booksDataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
