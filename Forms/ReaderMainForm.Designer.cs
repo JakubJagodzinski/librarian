@@ -48,11 +48,16 @@
             startDatePicker = new DateTimePicker();
             totalRentalsLabel = new Label();
             formsPlot = new ScottPlot.WinForms.FormsPlot();
+            emailLabel = new Label();
+            phoneNumberLabel = new Label();
+            birthdateLabel = new Label();
+            fullNameLabel = new Label();
             mainTabControl.SuspendLayout();
             booksTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)booksDataGridView).BeginInit();
             myRentalsTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)myRentalsDataGridView).BeginInit();
+            myAccountTabPage.SuspendLayout();
             rentalsHistoryTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)rentalsHistoryDataGridView).BeginInit();
             statisticsTabPage.SuspendLayout();
@@ -155,6 +160,10 @@
             // 
             // myAccountTabPage
             // 
+            myAccountTabPage.Controls.Add(fullNameLabel);
+            myAccountTabPage.Controls.Add(birthdateLabel);
+            myAccountTabPage.Controls.Add(phoneNumberLabel);
+            myAccountTabPage.Controls.Add(emailLabel);
             myAccountTabPage.Location = new Point(4, 24);
             myAccountTabPage.Name = "myAccountTabPage";
             myAccountTabPage.Padding = new Padding(3);
@@ -258,6 +267,42 @@
             formsPlot.Size = new Size(419, 367);
             formsPlot.TabIndex = 0;
             // 
+            // emailLabel
+            // 
+            emailLabel.AutoSize = true;
+            emailLabel.Location = new Point(21, 85);
+            emailLabel.Name = "emailLabel";
+            emailLabel.Size = new Size(47, 15);
+            emailLabel.TabIndex = 0;
+            emailLabel.Text = "Email: ?";
+            // 
+            // phoneNumberLabel
+            // 
+            phoneNumberLabel.AutoSize = true;
+            phoneNumberLabel.Location = new Point(21, 146);
+            phoneNumberLabel.Name = "phoneNumberLabel";
+            phoneNumberLabel.Size = new Size(97, 15);
+            phoneNumberLabel.TabIndex = 1;
+            phoneNumberLabel.Text = "Phone number: ?";
+            // 
+            // birthdateLabel
+            // 
+            birthdateLabel.AutoSize = true;
+            birthdateLabel.Location = new Point(21, 204);
+            birthdateLabel.Name = "birthdateLabel";
+            birthdateLabel.Size = new Size(66, 15);
+            birthdateLabel.TabIndex = 2;
+            birthdateLabel.Text = "Birthdate: ?";
+            // 
+            // fullNameLabel
+            // 
+            fullNameLabel.AutoSize = true;
+            fullNameLabel.Location = new Point(21, 31);
+            fullNameLabel.Name = "fullNameLabel";
+            fullNameLabel.Size = new Size(70, 15);
+            fullNameLabel.TabIndex = 3;
+            fullNameLabel.Text = "Full name: ?";
+            // 
             // ReaderMainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -273,6 +318,8 @@
             ((System.ComponentModel.ISupportInitialize)booksDataGridView).EndInit();
             myRentalsTabPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)myRentalsDataGridView).EndInit();
+            myAccountTabPage.ResumeLayout(false);
+            myAccountTabPage.PerformLayout();
             rentalsHistoryTabPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)rentalsHistoryDataGridView).EndInit();
             statisticsTabPage.ResumeLayout(false);
@@ -303,5 +350,9 @@
         private Label totalRentalsLabel;
         private ScottPlot.WinForms.FormsPlot formsPlot;
         private Button loadStatisticsButton;
+        private Label emailLabel;
+        private Label fullNameLabel;
+        private Label birthdateLabel;
+        private Label phoneNumberLabel;
     }
 }

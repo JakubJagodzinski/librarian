@@ -70,7 +70,13 @@ namespace librarian.Forms
             }
             if (mainTabControl.SelectedTab == mainTabControl.TabPages["statisticsTabPage"])
             {
-                // todo
+                startDatePicker.Value = DateTime.Today;
+                endDatePicker.Value = DateTime.Today;
+
+                formsPlot.Plot.Clear();
+                formsPlot.Refresh();
+
+                totalRentalsLabel.Text = "Total Rentals: 0";
             }
         }
 
@@ -149,6 +155,11 @@ namespace librarian.Forms
                 if (reader != null)
                 {
                     welcomeLabel.Text = $"Welcome, {reader.FullName}";
+
+                    fullNameLabel.Text = $"Full name: {reader.FullName}";
+                    emailLabel.Text = $"Email: {reader.Email}";
+                    phoneNumberLabel.Text = $"Phone number: {reader.PhoneNumber}";
+                    birthdateLabel.Text = $"Birthdate: {reader.DateOfBirth.ToShortDateString()}";
                 }
             }
         }
