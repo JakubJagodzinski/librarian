@@ -1,6 +1,6 @@
 ﻿using librarian.Models;
 
-namespace librarian.Data.Seeders
+namespace librarian.Data.Seeders.Implementations
 {
     internal class GenreSeeder : ISeeder
     {
