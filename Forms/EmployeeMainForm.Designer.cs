@@ -43,6 +43,9 @@
             removeFromBlacklistButton = new Button();
             blacklistedReadersDataGridView = new DataGridView();
             myAccountTabPage = new TabPage();
+            removePhotoButton = new Button();
+            photoBox = new PictureBox();
+            editPhotoButton = new Button();
             hireDateLabel = new Label();
             phoneNumberLabel = new Label();
             emailLabel = new Label();
@@ -58,6 +61,7 @@
             blacklistedReadersTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)blacklistedReadersDataGridView).BeginInit();
             myAccountTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)photoBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)libraryDbContextBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bookBindingSource).BeginInit();
             SuspendLayout();
@@ -209,6 +213,9 @@
             // 
             // myAccountTabPage
             // 
+            myAccountTabPage.Controls.Add(removePhotoButton);
+            myAccountTabPage.Controls.Add(photoBox);
+            myAccountTabPage.Controls.Add(editPhotoButton);
             myAccountTabPage.Controls.Add(hireDateLabel);
             myAccountTabPage.Controls.Add(phoneNumberLabel);
             myAccountTabPage.Controls.Add(emailLabel);
@@ -221,10 +228,40 @@
             myAccountTabPage.Text = "My Account";
             myAccountTabPage.UseVisualStyleBackColor = true;
             // 
+            // removePhotoButton
+            // 
+            removePhotoButton.Location = new Point(36, 256);
+            removePhotoButton.Name = "removePhotoButton";
+            removePhotoButton.Size = new Size(102, 23);
+            removePhotoButton.TabIndex = 6;
+            removePhotoButton.Text = "Remove photo";
+            removePhotoButton.UseVisualStyleBackColor = true;
+            removePhotoButton.Click += removePhotoButton_Click;
+            // 
+            // photoBox
+            // 
+            photoBox.BorderStyle = BorderStyle.FixedSingle;
+            photoBox.Location = new Point(20, 46);
+            photoBox.Name = "photoBox";
+            photoBox.Size = new Size(135, 165);
+            photoBox.SizeMode = PictureBoxSizeMode.Zoom;
+            photoBox.TabIndex = 4;
+            photoBox.TabStop = false;
+            // 
+            // editPhotoButton
+            // 
+            editPhotoButton.Location = new Point(36, 227);
+            editPhotoButton.Name = "editPhotoButton";
+            editPhotoButton.Size = new Size(102, 23);
+            editPhotoButton.TabIndex = 5;
+            editPhotoButton.Text = "Edit photo";
+            editPhotoButton.UseVisualStyleBackColor = true;
+            editPhotoButton.Click += editPhotoButton_Click;
+            // 
             // hireDateLabel
             // 
             hireDateLabel.AutoSize = true;
-            hireDateLabel.Location = new Point(29, 193);
+            hireDateLabel.Location = new Point(200, 169);
             hireDateLabel.Name = "hireDateLabel";
             hireDateLabel.Size = new Size(66, 15);
             hireDateLabel.TabIndex = 3;
@@ -233,7 +270,7 @@
             // phoneNumberLabel
             // 
             phoneNumberLabel.AutoSize = true;
-            phoneNumberLabel.Location = new Point(29, 141);
+            phoneNumberLabel.Location = new Point(200, 128);
             phoneNumberLabel.Name = "phoneNumberLabel";
             phoneNumberLabel.Size = new Size(97, 15);
             phoneNumberLabel.TabIndex = 2;
@@ -242,7 +279,7 @@
             // emailLabel
             // 
             emailLabel.AutoSize = true;
-            emailLabel.Location = new Point(29, 90);
+            emailLabel.Location = new Point(200, 88);
             emailLabel.Name = "emailLabel";
             emailLabel.Size = new Size(47, 15);
             emailLabel.TabIndex = 1;
@@ -251,7 +288,7 @@
             // fullNameLabel
             // 
             fullNameLabel.AutoSize = true;
-            fullNameLabel.Location = new Point(29, 43);
+            fullNameLabel.Location = new Point(200, 46);
             fullNameLabel.Name = "fullNameLabel";
             fullNameLabel.Size = new Size(70, 15);
             fullNameLabel.TabIndex = 0;
@@ -284,6 +321,7 @@
             ((System.ComponentModel.ISupportInitialize)blacklistedReadersDataGridView).EndInit();
             myAccountTabPage.ResumeLayout(false);
             myAccountTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)photoBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)libraryDbContextBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)bookBindingSource).EndInit();
             ResumeLayout(false);
@@ -314,5 +352,8 @@
         private Label fullNameLabel;
         private BindingSource libraryDbContextBindingSource;
         private BindingSource bookBindingSource;
+        private Button editPhotoButton;
+        private PictureBox photoBox;
+        private Button removePhotoButton;
     }
 }
