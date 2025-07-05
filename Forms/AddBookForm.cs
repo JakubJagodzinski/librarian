@@ -15,6 +15,7 @@ namespace librarian.Forms
             _employeeMainForm = employeeMainForm;
 
             LoadAuthors();
+            LoadGenres();
         }
 
         private void LoadAuthors()
@@ -31,6 +32,31 @@ namespace librarian.Forms
             }
         }
 
+        private void LoadGenres()
+        {
+            using (var db = new LibraryDbContext())
+            {
+                var genres = db.Genres.ToList();
+                genresCheckedListBox.DataSource = genres;
+                genresCheckedListBox.DisplayMember = "GenreName";
+                genresCheckedListBox.ValueMember = "GenreId";
+                genresLabel.Text = "Genres (0):";
+            }
+
+        }
+
+        private void genresCheckedListBox_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            int count = genresCheckedListBox.CheckedItems.Count;
+
+            if (e.NewValue == CheckState.Checked)
+                count++;
+            else if (e.NewValue == CheckState.Unchecked)
+                count--;
+
+            genresLabel.Text = $"Genres: ({count})";
+        }
+
         private void cancelButton_Click(object sender, EventArgs e)
         {
             _employeeMainForm.Show();
@@ -41,6 +67,7 @@ namespace librarian.Forms
         {
             var title = titleTextBox.Text.Trim();
             var authorName = authorComboBox.Text.Trim();
+            var selectedGenres = genresCheckedListBox.CheckedItems.Cast<Genre>().ToList();
 
             if (string.IsNullOrWhiteSpace(title))
             {
@@ -71,7 +98,11 @@ namespace librarian.Forms
                     AuthorId = author.AuthorId,
                     PublishedYear = (int)publishYearNumeric.Value,
                     Pages = (int)pagesNumeric.Value,
-                    InStock = (int)inStockNumeric.Value
+                    InStock = (int)inStockNumeric.Value,
+                    BookGenres = selectedGenres.Select(g => new BookGenre
+                    {
+                        GenreId = g.GenreId
+                    }).ToList()
                 };
 
                 db.Books.Add(newBook);

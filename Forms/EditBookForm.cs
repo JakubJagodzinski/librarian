@@ -20,13 +20,44 @@ namespace librarian.Forms
             _bookId = bookId;
 
             LoadAuthors();
+            LoadGenres();
             LoadBookData();
+        }
+
+        private void LoadGenres()
+        {
+            using (var db = new LibraryDbContext())
+            {
+                var genres = db.Genres.ToList();
+
+                genresCheckedListBox.DataSource = genres;
+                genresCheckedListBox.DisplayMember = "GenreName";
+                genresCheckedListBox.ValueMember = "GenreId";
+
+                genresCheckedListBox.Text = $"New genres ({genres.Count}):";
+            }
+        }
+
+        private void genresCheckedListBox_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            int count = genresCheckedListBox.CheckedItems.Count;
+
+            if (e.NewValue == CheckState.Checked)
+                count++;
+            else if (e.NewValue == CheckState.Unchecked)
+                count--;
+
+            genresLabel.Text = $"New genres: {count}";
         }
 
         private void LoadBookData()
         {
             using var db = new LibraryDbContext();
-            var book = db.Books.Include(b => b.Author).FirstOrDefault(b => b.BookId == _bookId);
+            var book = db.Books
+                .Include(b => b.Author)
+                .Include(b => b.BookGenres)
+                    .ThenInclude(bg => bg.Genre)
+                .FirstOrDefault(b => b.BookId == _bookId);
 
             if (book == null)
             {
@@ -41,11 +72,26 @@ namespace librarian.Forms
             pagesNumeric.Value = book.Pages;
             inStockNumeric.Value = book.InStock;
 
-            currentTitleLabel.Text = $"current: {book.Title}";
-            currentAuthorLabel.Text = $"current: {book.Author?.AuthorFullName ?? "-"}";
-            currentPublishYearLabel.Text = $"current: {book.PublishedYear}";
-            currentPagesLabel.Text = $"current: {book.Pages}";
-            currentInStockLabel.Text = $"current: {book.InStock}";
+            currentTitleLabel.Text = $"{book.Title}";
+            currentAuthorLabel.Text = $"{book.Author?.AuthorFullName ?? "-"}";
+            currentPublishYearLabel.Text = $"{book.PublishedYear}";
+            currentPagesLabel.Text = $"{book.Pages}";
+            currentInStockLabel.Text = $"{book.InStock}";
+
+            var selectedGenreIds = book.BookGenres.Select(bg => bg.GenreId).ToHashSet();
+            for (int i = 0; i < genresCheckedListBox.Items.Count; i++)
+            {
+                var genre = (Genre)genresCheckedListBox.Items[i];
+                genresCheckedListBox.SetItemChecked(i, selectedGenreIds.Contains(genre.GenreId));
+            }
+
+            var genreNames = book.BookGenres.Select(bg => bg.Genre.GenreName).ToList();
+            currentGenresList.Items.Clear();
+            foreach (var name in genreNames)
+                currentGenresList.Items.Add(name);
+
+            currentGenresLabelHeader.Text = $"Current genres ({genreNames.Count}):";
+
         }
 
         private void LoadAuthors()
@@ -77,7 +123,9 @@ namespace librarian.Forms
             }
 
             using var db = new LibraryDbContext();
-            var book = db.Books.FirstOrDefault(b => b.BookId == _bookId);
+            var book = db.Books
+            .Include(b => b.BookGenres)
+            .FirstOrDefault(b => b.BookId == _bookId);
 
             if (book == null)
             {
@@ -99,6 +147,18 @@ namespace librarian.Forms
             book.PublishedYear = (int)publishYearNumeric.Value;
             book.Pages = (int)pagesNumeric.Value;
             book.InStock = (int)inStockNumeric.Value;
+
+            book.BookGenres.Clear();
+
+            foreach (var item in genresCheckedListBox.CheckedItems)
+            {
+                var genre = (Genre)item;
+                book.BookGenres.Add(new BookGenre
+                {
+                    BookId = book.BookId,
+                    GenreId = genre.GenreId
+                });
+            }
 
             db.SaveChanges();
 

@@ -56,7 +56,7 @@ namespace librarian.Data
 
             modelBuilder.Entity<BookGenre>()
                 .HasOne(bg => bg.Genre)
-                .WithMany()
+                .WithMany(g => g.BookGenres)
                 .HasForeignKey(bg => bg.GenreId);
 
             // BlacklistedReader -> Reader
