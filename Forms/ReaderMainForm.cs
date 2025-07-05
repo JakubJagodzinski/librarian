@@ -217,8 +217,22 @@ namespace librarian.Forms
             }
         }
 
+        private bool IsOnBlackList()
+        {
+            using (var db = new LibraryDbContext())
+            {
+                return db.BlacklistedReaders.Any(b => b.ReaderId == _userId);
+            }
+        }
+
         private void rentBookButton_Click(object sender, EventArgs e)
         {
+            if (IsOnBlackList())
+            {
+                MessageBox.Show("You are on blacklist and cannot rent a book.");
+                return;
+            }
+
             if (_selectedBookId == null)
             {
                 MessageBox.Show("Please select a book to rent.");
