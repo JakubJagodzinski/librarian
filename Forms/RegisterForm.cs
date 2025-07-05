@@ -1,4 +1,5 @@
-﻿using librarian.Data;
+﻿using System.Text.RegularExpressions;
+using librarian.Data;
 using librarian.Models;
 
 namespace librarian.Forms
@@ -31,6 +32,7 @@ namespace librarian.Forms
                     passwordTextBox.Text = null;
                     confirmPasswordTextBox.Text = null;
                     phoneNumberTextBox.Text = null;
+                    datePicker.Value = DateTime.Now;
                     var role = roleComboBox.SelectedIndex = 0;
                 }
             };
@@ -43,6 +45,20 @@ namespace librarian.Forms
             roleComboBox.SelectedIndex = 0;
         }
 
+        private void RoleComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedRole = roleComboBox.SelectedItem?.ToString();
+
+            if (selectedRole == "Reader")
+            {
+                dateLabel.Text = "Birthdate:";
+            }
+            else if (selectedRole == "Employee")
+            {
+                dateLabel.Text = "Hire date:";
+            }
+        }
+
         private void registerButton_Click(object sender, EventArgs e)
         {
             var fullName = fullNameTextBox.Text.Trim();
@@ -51,6 +67,7 @@ namespace librarian.Forms
             var confirm = confirmPasswordTextBox.Text;
             var role = roleComboBox.SelectedItem?.ToString();
             var phoneNumber = phoneNumberTextBox.Text.Trim();
+            var date = datePicker.Value;
 
             if (
                 string.IsNullOrEmpty(fullName) ||
@@ -62,6 +79,22 @@ namespace librarian.Forms
             {
                 MessageBox.Show("All fields are required.");
                 return;
+            }
+
+            string phonePattern = @"^\+?[0-9\s\-\(\)]{7,15}$";
+            if (!Regex.IsMatch(phoneNumber, phonePattern))
+            {
+                MessageBox.Show("Invalid phone number format.");
+                return;
+            }
+
+            if (role == "Reader")
+            {
+                if (date > DateTime.Now)
+                {
+                    MessageBox.Show("Birthdate cannot be future date.");
+                    return;
+                }
             }
 
             if (password != confirm)
@@ -91,7 +124,8 @@ namespace librarian.Forms
                 {
                     FullName = fullName,
                     Email = email,
-                    PhoneNumber = phoneNumber
+                    PhoneNumber = phoneNumber,
+                    DateOfBirth = date
                 };
                 db.Readers.Add(reader);
                 db.SaveChanges();
@@ -103,7 +137,8 @@ namespace librarian.Forms
                 {
                     FullName = fullName,
                     Email = email,
-                    PhoneNumber = phoneNumber
+                    PhoneNumber = phoneNumber,
+                    HireDate = date
                 };
                 db.Employees.Add(emp);
                 db.SaveChanges();

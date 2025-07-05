@@ -42,11 +42,13 @@
             phoneNumberLabel = new Label();
             passwordTextBox = new TextBox();
             confirmPasswordTextBox = new TextBox();
+            datePicker = new DateTimePicker();
+            dateLabel = new Label();
             SuspendLayout();
             // 
             // registerButton
             // 
-            registerButton.Location = new Point(386, 373);
+            registerButton.Location = new Point(439, 382);
             registerButton.Name = "registerButton";
             registerButton.Size = new Size(75, 23);
             registerButton.TabIndex = 0;
@@ -57,122 +59,145 @@
             // labelEmail
             // 
             labelEmail.AutoSize = true;
-            labelEmail.Location = new Point(316, 133);
+            labelEmail.Location = new Point(295, 99);
             labelEmail.Name = "labelEmail";
             labelEmail.Size = new Size(39, 15);
             labelEmail.TabIndex = 1;
-            labelEmail.Text = "email:";
+            labelEmail.Text = "Email:";
             // 
             // labelPassword
             // 
             labelPassword.AutoSize = true;
-            labelPassword.Location = new Point(316, 177);
+            labelPassword.Location = new Point(295, 143);
             labelPassword.Name = "labelPassword";
             labelPassword.Size = new Size(60, 15);
             labelPassword.TabIndex = 2;
-            labelPassword.Text = "password:";
+            labelPassword.Text = "Password:";
             // 
             // labelConfirm
             // 
             labelConfirm.AutoSize = true;
-            labelConfirm.Location = new Point(316, 221);
+            labelConfirm.Location = new Point(295, 187);
             labelConfirm.Name = "labelConfirm";
-            labelConfirm.Size = new Size(105, 15);
+            labelConfirm.Size = new Size(107, 15);
             labelConfirm.TabIndex = 3;
-            labelConfirm.Text = "confirm password:";
+            labelConfirm.Text = "Confirm password:";
             // 
             // emailTextBox
             // 
-            emailTextBox.Location = new Point(316, 151);
+            emailTextBox.Location = new Point(295, 117);
             emailTextBox.Name = "emailTextBox";
             emailTextBox.PlaceholderText = "john@example.com";
-            emailTextBox.Size = new Size(121, 23);
+            emailTextBox.Size = new Size(219, 23);
             emailTextBox.TabIndex = 4;
             // 
             // roleComboBox
             // 
             roleComboBox.FormattingEnabled = true;
-            roleComboBox.Location = new Point(316, 327);
+            roleComboBox.Location = new Point(295, 337);
             roleComboBox.Name = "roleComboBox";
-            roleComboBox.Size = new Size(121, 23);
+            roleComboBox.Size = new Size(219, 23);
             roleComboBox.TabIndex = 7;
+            roleComboBox.SelectedIndexChanged += RoleComboBox_SelectedIndexChanged;
             // 
             // accountType
             // 
             accountType.AutoSize = true;
-            accountType.Location = new Point(316, 309);
+            accountType.Location = new Point(295, 319);
             accountType.Name = "accountType";
-            accountType.Size = new Size(79, 15);
+            accountType.Size = new Size(81, 15);
             accountType.TabIndex = 8;
-            accountType.Text = "account type:";
+            accountType.Text = "Account type:";
             // 
             // backButton
             // 
-            backButton.Location = new Point(280, 373);
+            backButton.BackColor = Color.FromArgb(255, 128, 128);
+            backButton.FlatAppearance.BorderColor = Color.FromArgb(255, 128, 128);
+            backButton.FlatAppearance.BorderSize = 0;
+            backButton.FlatStyle = FlatStyle.System;
+            backButton.Location = new Point(295, 382);
             backButton.Name = "backButton";
             backButton.Size = new Size(75, 23);
             backButton.TabIndex = 9;
             backButton.Text = "Back";
-            backButton.UseVisualStyleBackColor = true;
+            backButton.UseVisualStyleBackColor = false;
             backButton.Click += backButton_Click;
             // 
             // fullNameLabel
             // 
             fullNameLabel.AutoSize = true;
-            fullNameLabel.Location = new Point(316, 89);
+            fullNameLabel.Location = new Point(295, 55);
             fullNameLabel.Name = "fullNameLabel";
-            fullNameLabel.Size = new Size(60, 15);
+            fullNameLabel.Size = new Size(62, 15);
             fullNameLabel.TabIndex = 10;
-            fullNameLabel.Text = "full name:";
+            fullNameLabel.Text = "Full name:";
             // 
             // fullNameTextBox
             // 
-            fullNameTextBox.Location = new Point(316, 107);
+            fullNameTextBox.Location = new Point(295, 73);
             fullNameTextBox.Name = "fullNameTextBox";
             fullNameTextBox.PlaceholderText = "John Doe";
-            fullNameTextBox.Size = new Size(121, 23);
+            fullNameTextBox.Size = new Size(219, 23);
             fullNameTextBox.TabIndex = 11;
             // 
             // phoneNumberTextBox
             // 
-            phoneNumberTextBox.Location = new Point(316, 283);
+            phoneNumberTextBox.Location = new Point(295, 249);
             phoneNumberTextBox.Name = "phoneNumberTextBox";
             phoneNumberTextBox.PlaceholderText = "123 456 789";
-            phoneNumberTextBox.Size = new Size(121, 23);
+            phoneNumberTextBox.Size = new Size(219, 23);
             phoneNumberTextBox.TabIndex = 12;
             // 
             // phoneNumberLabel
             // 
             phoneNumberLabel.AutoSize = true;
-            phoneNumberLabel.Location = new Point(316, 265);
+            phoneNumberLabel.Location = new Point(295, 231);
             phoneNumberLabel.Name = "phoneNumberLabel";
             phoneNumberLabel.Size = new Size(89, 15);
             phoneNumberLabel.TabIndex = 13;
-            phoneNumberLabel.Text = "phone number:";
+            phoneNumberLabel.Text = "Phone number:";
             // 
             // passwordTextBox
             // 
-            passwordTextBox.Location = new Point(316, 195);
+            passwordTextBox.Location = new Point(295, 161);
             passwordTextBox.Name = "passwordTextBox";
             passwordTextBox.PlaceholderText = "************";
-            passwordTextBox.Size = new Size(121, 23);
+            passwordTextBox.Size = new Size(219, 23);
             passwordTextBox.TabIndex = 14;
             passwordTextBox.UseSystemPasswordChar = true;
             // 
             // confirmPasswordTextBox
             // 
-            confirmPasswordTextBox.Location = new Point(316, 239);
+            confirmPasswordTextBox.Location = new Point(295, 205);
             confirmPasswordTextBox.Name = "confirmPasswordTextBox";
             confirmPasswordTextBox.PlaceholderText = "************";
-            confirmPasswordTextBox.Size = new Size(121, 23);
+            confirmPasswordTextBox.Size = new Size(219, 23);
             confirmPasswordTextBox.TabIndex = 15;
             confirmPasswordTextBox.UseSystemPasswordChar = true;
+            // 
+            // datePicker
+            // 
+            datePicker.Location = new Point(295, 293);
+            datePicker.Name = "datePicker";
+            datePicker.Size = new Size(219, 23);
+            datePicker.TabIndex = 16;
+            // 
+            // dateLabel
+            // 
+            dateLabel.AutoSize = true;
+            dateLabel.Location = new Point(295, 275);
+            dateLabel.Name = "dateLabel";
+            dateLabel.Size = new Size(34, 15);
+            dateLabel.TabIndex = 17;
+            dateLabel.Text = "Date:";
             // 
             // RegisterForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(dateLabel);
+            Controls.Add(datePicker);
             Controls.Add(confirmPasswordTextBox);
             Controls.Add(passwordTextBox);
             Controls.Add(phoneNumberLabel);
@@ -209,5 +234,7 @@
         private Label phoneNumberLabel;
         private TextBox passwordTextBox;
         private TextBox confirmPasswordTextBox;
+        private DateTimePicker datePicker;
+        private Label dateLabel;
     }
 }
