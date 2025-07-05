@@ -1,4 +1,5 @@
 ﻿using librarian.Data;
+using librarian.Dto;
 using librarian.Models;
 using Microsoft.EntityFrameworkCore;
 using ScottPlot;
@@ -84,20 +85,24 @@ namespace librarian.Forms
         {
             using (var db = new LibraryDbContext())
             {
-                var books = db.Books
+                var books = new SortableBindingList<BookDisplayDto>(db.Books
                     .Include(b => b.Author)
-                    .Select(b => new
+                    .Select(b => new BookDisplayDto
                     {
-                        b.BookId,
-                        b.Title,
-                        Author = b.Author.AuthorFullName,
-                        b.PublishedYear,
-                        b.Pages,
-                        b.InStock
-                    }).ToList();
+                        BookId = b.BookId,
+                        Title = b.Title,
+                        Author = b.Author.AuthorFullName ?? "",
+                        PublishedYear = b.PublishedYear,
+                        Pages = b.Pages,
+                        InStock = b.InStock
+                    }).ToList());
 
                 booksDataGridView.DataSource = books;
-                booksDataGridView.Columns["BookId"].Visible = false;
+
+                foreach (DataGridViewColumn col in booksDataGridView.Columns)
+                {
+                    col.SortMode = DataGridViewColumnSortMode.Automatic;
+                }
             }
         }
 
@@ -105,21 +110,27 @@ namespace librarian.Forms
         {
             using (var db = new LibraryDbContext())
             {
-                var rentals = db.Rentals
-                    .Include(r => r.Book)
-                    .Include(r => r.Reader)
-                    .Where(r => r.ReaderId == _userId && r.ReturnDate == null)
-                    .Select(r => new
-                    {
-                        r.RentalId,
-                        r.Book.Title,
-                        RentalDate = r.RentalDate.ToShortDateString(),
-                        PlannedReturnDate = r.PlannedReturnDate.ToShortDateString()
-                    })
-                    .ToList();
+                var rentals = new SortableBindingList<MyRentalDisplayDto>(
+                    db.Rentals
+                        .Include(r => r.Book)
+                        .Include(r => r.Reader)
+                        .Where(r => r.ReaderId == _userId && r.ReturnDate == null)
+                        .Select(r => new MyRentalDisplayDto
+                        {
+                            RentalId = r.RentalId,
+                            BookTitle = r.Book.Title,
+                            RentalDate = r.RentalDate.ToShortDateString(),
+                            PlannedReturnDate = r.PlannedReturnDate.ToShortDateString()
+                        })
+                        .ToList());
 
                 myRentalsDataGridView.DataSource = rentals;
                 myRentalsDataGridView.Columns["RentalId"].Visible = false;
+
+                foreach (DataGridViewColumn col in myRentalsDataGridView.Columns)
+                {
+                    col.SortMode = DataGridViewColumnSortMode.Automatic;
+                }
             }
         }
 
@@ -127,22 +138,28 @@ namespace librarian.Forms
         {
             using (var db = new LibraryDbContext())
             {
-                var rentals = db.Rentals
-                    .Include(r => r.Book)
-                    .Include(r => r.Reader)
-                    .Where(r => r.ReaderId == _userId && r.ReturnDate != null)
-                    .Select(r => new
-                    {
-                        r.RentalId,
-                        r.Book.Title,
-                        RentalDate = r.RentalDate.ToShortDateString(),
-                        PlannedReturnDate = r.PlannedReturnDate.ToShortDateString(),
-                        ReturnDate = r.ReturnDate.Value.ToShortDateString()
-                    })
-                    .ToList();
+                var rentals = new SortableBindingList<RentalHistoryDisplayDto>(
+                    db.Rentals
+                        .Include(r => r.Book)
+                        .Include(r => r.Reader)
+                        .Where(r => r.ReaderId == _userId && r.ReturnDate != null)
+                        .Select(r => new RentalHistoryDisplayDto
+                        {
+                            RentalId = r.RentalId,
+                            BookTitle = r.Book.Title,
+                            RentalDate = r.RentalDate.ToShortDateString(),
+                            PlannedReturnDate = r.PlannedReturnDate.ToShortDateString(),
+                            ReturnDate = r.ReturnDate.HasValue ? r.ReturnDate.Value.ToShortDateString() : ""
+                        })
+                        .ToList());
 
                 rentalsHistoryDataGridView.DataSource = rentals;
                 rentalsHistoryDataGridView.Columns["RentalId"].Visible = false;
+
+                foreach (DataGridViewColumn col in rentalsHistoryDataGridView.Columns)
+                {
+                    col.SortMode = DataGridViewColumnSortMode.Automatic;
+                }
             }
         }
 

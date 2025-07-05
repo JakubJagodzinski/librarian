@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             welcomeLabel = new Label();
             logoutButton = new Button();
             tabControl1 = new TabControl();
@@ -41,12 +42,14 @@
             blacklistedReadersTabPage = new TabPage();
             removeFromBlacklistButton = new Button();
             blacklistedReadersDataGridView = new DataGridView();
-            pageSetupDialog1 = new PageSetupDialog();
             myAccountTabPage = new TabPage();
-            fullNameLabel = new Label();
-            emailLabel = new Label();
-            phoneNumberLabel = new Label();
             hireDateLabel = new Label();
+            phoneNumberLabel = new Label();
+            emailLabel = new Label();
+            fullNameLabel = new Label();
+            pageSetupDialog1 = new PageSetupDialog();
+            libraryDbContextBindingSource = new BindingSource(components);
+            bookBindingSource = new BindingSource(components);
             tabControl1.SuspendLayout();
             booksTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)booksDataGridView).BeginInit();
@@ -55,6 +58,8 @@
             blacklistedReadersTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)blacklistedReadersDataGridView).BeginInit();
             myAccountTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)libraryDbContextBindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)bookBindingSource).BeginInit();
             SuspendLayout();
             // 
             // welcomeLabel
@@ -124,6 +129,9 @@
             // 
             // booksDataGridView
             // 
+            booksDataGridView.AllowUserToAddRows = false;
+            booksDataGridView.AllowUserToDeleteRows = false;
+            booksDataGridView.AllowUserToResizeRows = false;
             booksDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             booksDataGridView.Location = new Point(0, 0);
             booksDataGridView.Name = "booksDataGridView";
@@ -207,23 +215,14 @@
             myAccountTabPage.Text = "My Account";
             myAccountTabPage.UseVisualStyleBackColor = true;
             // 
-            // fullNameLabel
+            // hireDateLabel
             // 
-            fullNameLabel.AutoSize = true;
-            fullNameLabel.Location = new Point(29, 43);
-            fullNameLabel.Name = "fullNameLabel";
-            fullNameLabel.Size = new Size(70, 15);
-            fullNameLabel.TabIndex = 0;
-            fullNameLabel.Text = "Full name: ?";
-            // 
-            // emailLabel
-            // 
-            emailLabel.AutoSize = true;
-            emailLabel.Location = new Point(29, 90);
-            emailLabel.Name = "emailLabel";
-            emailLabel.Size = new Size(47, 15);
-            emailLabel.TabIndex = 1;
-            emailLabel.Text = "Email: ?";
+            hireDateLabel.AutoSize = true;
+            hireDateLabel.Location = new Point(29, 193);
+            hireDateLabel.Name = "hireDateLabel";
+            hireDateLabel.Size = new Size(66, 15);
+            hireDateLabel.TabIndex = 3;
+            hireDateLabel.Text = "Hire date: ?";
             // 
             // phoneNumberLabel
             // 
@@ -234,14 +233,31 @@
             phoneNumberLabel.TabIndex = 2;
             phoneNumberLabel.Text = "Phone number: ?";
             // 
-            // hireDateLabel
+            // emailLabel
             // 
-            hireDateLabel.AutoSize = true;
-            hireDateLabel.Location = new Point(29, 193);
-            hireDateLabel.Name = "hireDateLabel";
-            hireDateLabel.Size = new Size(66, 15);
-            hireDateLabel.TabIndex = 3;
-            hireDateLabel.Text = "Hire date: ?";
+            emailLabel.AutoSize = true;
+            emailLabel.Location = new Point(29, 90);
+            emailLabel.Name = "emailLabel";
+            emailLabel.Size = new Size(47, 15);
+            emailLabel.TabIndex = 1;
+            emailLabel.Text = "Email: ?";
+            // 
+            // fullNameLabel
+            // 
+            fullNameLabel.AutoSize = true;
+            fullNameLabel.Location = new Point(29, 43);
+            fullNameLabel.Name = "fullNameLabel";
+            fullNameLabel.Size = new Size(70, 15);
+            fullNameLabel.TabIndex = 0;
+            fullNameLabel.Text = "Full name: ?";
+            // 
+            // libraryDbContextBindingSource
+            // 
+            libraryDbContextBindingSource.DataSource = typeof(Data.LibraryDbContext);
+            // 
+            // bookBindingSource
+            // 
+            bookBindingSource.DataSource = typeof(Models.Book);
             // 
             // EmployeeMainForm
             // 
@@ -262,6 +278,8 @@
             ((System.ComponentModel.ISupportInitialize)blacklistedReadersDataGridView).EndInit();
             myAccountTabPage.ResumeLayout(false);
             myAccountTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)libraryDbContextBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)bookBindingSource).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -288,5 +306,7 @@
         private Label phoneNumberLabel;
         private Label emailLabel;
         private Label fullNameLabel;
+        private BindingSource libraryDbContextBindingSource;
+        private BindingSource bookBindingSource;
     }
 }

@@ -38,6 +38,10 @@
             endRentalButton = new Button();
             myRentalsDataGridView = new DataGridView();
             myAccountTabPage = new TabPage();
+            fullNameLabel = new Label();
+            birthdateLabel = new Label();
+            phoneNumberLabel = new Label();
+            emailLabel = new Label();
             rentalsHistoryTabPage = new TabPage();
             rentalsHistoryDataGridView = new DataGridView();
             statisticsTabPage = new TabPage();
@@ -48,10 +52,6 @@
             startDatePicker = new DateTimePicker();
             totalRentalsLabel = new Label();
             formsPlot = new ScottPlot.WinForms.FormsPlot();
-            emailLabel = new Label();
-            phoneNumberLabel = new Label();
-            birthdateLabel = new Label();
-            fullNameLabel = new Label();
             mainTabControl.SuspendLayout();
             booksTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)booksDataGridView).BeginInit();
@@ -86,9 +86,9 @@
             // 
             mainTabControl.Controls.Add(booksTabPage);
             mainTabControl.Controls.Add(myRentalsTabPage);
-            mainTabControl.Controls.Add(myAccountTabPage);
             mainTabControl.Controls.Add(rentalsHistoryTabPage);
             mainTabControl.Controls.Add(statisticsTabPage);
+            mainTabControl.Controls.Add(myAccountTabPage);
             mainTabControl.Location = new Point(22, 43);
             mainTabControl.Name = "mainTabControl";
             mainTabControl.SelectedIndex = 0;
@@ -171,6 +171,42 @@
             myAccountTabPage.TabIndex = 2;
             myAccountTabPage.Text = "My Account";
             myAccountTabPage.UseVisualStyleBackColor = true;
+            // 
+            // fullNameLabel
+            // 
+            fullNameLabel.AutoSize = true;
+            fullNameLabel.Location = new Point(21, 31);
+            fullNameLabel.Name = "fullNameLabel";
+            fullNameLabel.Size = new Size(70, 15);
+            fullNameLabel.TabIndex = 3;
+            fullNameLabel.Text = "Full name: ?";
+            // 
+            // birthdateLabel
+            // 
+            birthdateLabel.AutoSize = true;
+            birthdateLabel.Location = new Point(21, 204);
+            birthdateLabel.Name = "birthdateLabel";
+            birthdateLabel.Size = new Size(66, 15);
+            birthdateLabel.TabIndex = 2;
+            birthdateLabel.Text = "Birthdate: ?";
+            // 
+            // phoneNumberLabel
+            // 
+            phoneNumberLabel.AutoSize = true;
+            phoneNumberLabel.Location = new Point(21, 146);
+            phoneNumberLabel.Name = "phoneNumberLabel";
+            phoneNumberLabel.Size = new Size(97, 15);
+            phoneNumberLabel.TabIndex = 1;
+            phoneNumberLabel.Text = "Phone number: ?";
+            // 
+            // emailLabel
+            // 
+            emailLabel.AutoSize = true;
+            emailLabel.Location = new Point(21, 85);
+            emailLabel.Name = "emailLabel";
+            emailLabel.Size = new Size(47, 15);
+            emailLabel.TabIndex = 0;
+            emailLabel.Text = "Email: ?";
             // 
             // rentalsHistoryTabPage
             // 
@@ -266,42 +302,6 @@
             formsPlot.Name = "formsPlot";
             formsPlot.Size = new Size(419, 367);
             formsPlot.TabIndex = 0;
-            // 
-            // emailLabel
-            // 
-            emailLabel.AutoSize = true;
-            emailLabel.Location = new Point(21, 85);
-            emailLabel.Name = "emailLabel";
-            emailLabel.Size = new Size(47, 15);
-            emailLabel.TabIndex = 0;
-            emailLabel.Text = "Email: ?";
-            // 
-            // phoneNumberLabel
-            // 
-            phoneNumberLabel.AutoSize = true;
-            phoneNumberLabel.Location = new Point(21, 146);
-            phoneNumberLabel.Name = "phoneNumberLabel";
-            phoneNumberLabel.Size = new Size(97, 15);
-            phoneNumberLabel.TabIndex = 1;
-            phoneNumberLabel.Text = "Phone number: ?";
-            // 
-            // birthdateLabel
-            // 
-            birthdateLabel.AutoSize = true;
-            birthdateLabel.Location = new Point(21, 204);
-            birthdateLabel.Name = "birthdateLabel";
-            birthdateLabel.Size = new Size(66, 15);
-            birthdateLabel.TabIndex = 2;
-            birthdateLabel.Text = "Birthdate: ?";
-            // 
-            // fullNameLabel
-            // 
-            fullNameLabel.AutoSize = true;
-            fullNameLabel.Location = new Point(21, 31);
-            fullNameLabel.Name = "fullNameLabel";
-            fullNameLabel.Size = new Size(70, 15);
-            fullNameLabel.TabIndex = 3;
-            fullNameLabel.Text = "Full name: ?";
             // 
             // ReaderMainForm
             // 

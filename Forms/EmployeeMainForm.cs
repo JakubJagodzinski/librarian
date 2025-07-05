@@ -1,4 +1,5 @@
 ﻿using librarian.Data;
+using librarian.Dto;
 using Microsoft.EntityFrameworkCore;
 
 namespace librarian.Forms
@@ -73,21 +74,26 @@ namespace librarian.Forms
         {
             using (var db = new LibraryDbContext())
             {
-                var blacklistedReaders = db.BlacklistedReaders
-                    .Include(b => b.Reader)
-                    .Where(b => b.RemovalDate == null || b.RemovalDate > DateTime.Now)
-                    .ToList();
+                var blacklistedReaders = new SortableBindingList<BlacklistedReaderDisplayDto>(
+                    db.BlacklistedReaders
+                        .Include(b => b.Reader)
+                        .Where(b => b.RemovalDate == null || b.RemovalDate > DateTime.Now)
+                        .Select(b => new BlacklistedReaderDisplayDto
+                        {
+                            BlacklistedReaderId = b.BlacklistedReaderId,
+                            ReaderName = b.Reader.FullName ?? "",
+                            Reason = b.Reason ?? "",
+                            BlacklistedDate = b.BlacklistedDate.ToShortDateString(),
+                            RemovalDate = b.RemovalDate.HasValue ? b.RemovalDate.Value.ToShortDateString() : "–"
+                        })
+                        .ToList());
 
-                blacklistedReadersDataGridView.DataSource = blacklistedReaders
-                    .Select(b => new
-                    {
-                        b.BlacklistedReaderId,
-                        ReaderName = b.Reader.FullName,
-                        b.Reason,
-                        BlacklistedDate = b.BlacklistedDate.ToShortDateString(),
-                        RemovalDate = b.RemovalDate?.ToShortDateString() ?? "–"
-                    })
-                    .ToList();
+                blacklistedReadersDataGridView.DataSource = blacklistedReaders;
+
+                foreach (DataGridViewColumn col in blacklistedReadersDataGridView.Columns)
+                {
+                    col.SortMode = DataGridViewColumnSortMode.Automatic;
+                }
             }
         }
 
@@ -95,19 +101,22 @@ namespace librarian.Forms
         {
             using (var db = new LibraryDbContext())
             {
-                var readers = db.Readers
-                    .ToList();
-
-                readersDataGridView.DataSource = readers
-                    .Select(r => new
+                var readers = new SortableBindingList<ReaderDisplayDto>(db.Readers
+                    .Select(r => new ReaderDisplayDto
                     {
-                        r?.ReaderId,
-                        FullName = r?.FullName ?? "",
-                        Email = r?.Email ?? "",
-                        PhoneNumber = r?.PhoneNumber ?? "",
-                        r?.DateOfBirth,
+                        ReaderId = r.ReaderId,
+                        FullName = r.FullName ?? "",
+                        Email = r.Email ?? "",
+                        PhoneNumber = r.PhoneNumber ?? "",
+                        DateOfBirth = r.DateOfBirth
+                    }).ToList());
 
-                    }).ToList();
+                readersDataGridView.DataSource = readers;
+
+                foreach (DataGridViewColumn col in readersDataGridView.Columns)
+                {
+                    col.SortMode = DataGridViewColumnSortMode.Automatic;
+                }
             }
         }
 
@@ -115,20 +124,24 @@ namespace librarian.Forms
         {
             using (var db = new LibraryDbContext())
             {
-                var books = db.Books
+                var books = new SortableBindingList<BookDisplayDto>(db.Books
                     .Include(b => b.Author)
-                    .ToList();
-
-                booksDataGridView.DataSource = books
-                    .Select(b => new
+                    .Select(b => new BookDisplayDto
                     {
-                        b.BookId,
-                        b.Title,
-                        Author = b.Author?.AuthorFullName ?? "",
-                        b.PublishedYear,
-                        b.Pages,
-                        b.InStock
-                    }).ToList();
+                        BookId = b.BookId,
+                        Title = b.Title,
+                        Author = b.Author.AuthorFullName ?? "",
+                        PublishedYear = b.PublishedYear,
+                        Pages = b.Pages,
+                        InStock = b.InStock
+                    }).ToList());
+
+                booksDataGridView.DataSource = books;
+
+                foreach (DataGridViewColumn col in booksDataGridView.Columns)
+                {
+                    col.SortMode = DataGridViewColumnSortMode.Automatic;
+                }
             }
         }
 
